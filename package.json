@@ -1,0 +1,40 @@
+{
+  "name": "admin_account",
+  "version": "1.0.0",
+  "description": "educational project",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "rest-api": "json-server db.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ilya St.",
+  "license": "ISC",
+  "browserslist": "> 1%, not dead",
+  "devDependencies": {
+    "@babel/core": "^7.17.2",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.6.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "mini-css-extract-plugin": "^2.5.3",
+    "postcss": "^8.4.6",
+    "postcss-loader": "^6.2.1",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
+  },
+  "dependencies": {
+    "json-server": "^0.17.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
+    "redux": "^4.1.2"
+  }
+}
