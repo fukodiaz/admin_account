@@ -20,9 +20,14 @@ export default class AdminAccountService {
 
 	postData = async (url, data) => {
 		const res = await fetch(`${this._apiBase}${url}`, {
+			mode: 'cors',
+			//credentials: "include",
 			method: 'POST',
 			headers: {
-				'Content-type': 'application/json'
+				'Access-Control-Allow-Origin': '*',
+				'Content-type': 'application/json',
+				'Accept': 'application/json',
+				//'Origin': '*'
 			},
 			body: data
 		});
@@ -39,8 +44,8 @@ export default class AdminAccountService {
 	};
 
 	postDataPersonal = async (json) => {
-		const res = await this.postData(`/dataPersonal`, json);
-		return res;
+		const res = await this.postData(`/personalData`, json);
+		return res;		
 	}
 
 }

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack serve --mode development",
     "build": "webpack --mode production",
-    "rest-api": "json-server db.json",
+    "start": "nodemon --experimental-modules --es-module-specifier-resolution=node server/server.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ilya St.",
@@ -23,6 +23,7 @@
     "less": "^4.1.2",
     "less-loader": "^10.2.0",
     "mini-css-extract-plugin": "^2.5.3",
+    "nodemon": "^2.0.16",
     "postcss": "^8.4.6",
     "postcss-loader": "^6.2.1",
     "webpack": "^5.68.0",
@@ -30,11 +31,16 @@
     "webpack-dev-server": "^4.7.4"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
     "json-server": "^0.17.0",
+    "path": "^0.12.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
+    "redis-om": "^0.3.4",
     "redux": "^4.1.2"
   }
 }

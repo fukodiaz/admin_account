@@ -2,11 +2,28 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import { editingPersonalData } from '../../actions';
+import {compose, withAdminAccountService} from '../hoc';
+import {
+	dataPersonalRequested,
+	dataPersonalPosted,
+	dataPersonalError } from '../../actions';
 
 import pencil from './pencil.svg';
 import styles from './form-personal-data.m.less';
 
 class FormPersonalData extends Component {
+
+	handleSubmit = (e) => {
+		e.preventDefault();
+
+		const formData = new FormData(e.target);
+		const objForm = JSON.stringify(Object.fromEntries(formData.entries(formData)));
+		this.props.dataPersonalRequested();
+		//this.props.postingDataPersonal(objForm);
+		this.props.postDataPersonal(objForm)
+			.then(data => {this.props.dataPersonalPosted(data); console.log(data, '222ggg');})
+			.catch(error => {this.props.dataPersonalError(error); console.log(error, '444ererer');});
+	}
 
 	render() {
 		const {flagEditingPersonal, editingPersonalData} = this.props;
@@ -16,7 +33,8 @@ class FormPersonalData extends Component {
 
 		return (
 			<div className={styles.containerFormPersonal}>
-				<form encType="multipart/form-data" className={styles[`${classForm}`]}>
+				<form encType="multipart/form-data" className={styles[`${classForm}`]}
+							onSubmit={this.handleSubmit}>
 					<div className={styles.wrapperInputs}>
 						<div className={styles.blockPhoto}>
 							<label htmlFor="photo" className={styles.labelPhotoPersonal}>
@@ -24,7 +42,7 @@ class FormPersonalData extends Component {
 							</label>
 							<input type="file" id="photo" name="photo"
 										accept="image/jpeg, image/png, image/svg"
-										className={styles.inputPhotoPersonal} required disabled={disabled} />
+										className={styles.inputPhotoPersonal} disabled={disabled} />
 						</div>
 						<div className={styles.blockTextData}>
 							<div className={styles.blockFIO}>
@@ -61,12 +79,23 @@ class FormPersonalData extends Component {
 	}
 }
 
+const mapMethodsToProps = (adminAccountService) => ({
+	postDataPersonal: adminAccountService.postDataPersonal
+});
+
 const mapStateToProps = ({flagEditingPersonal}) => ({
 	flagEditingPersonal
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	editingPersonalData: () => dispatch(editingPersonalData())
+	editingPersonalData: () => dispatch(editingPersonalData()),
+	//postingDataPersonal: (data) => postingDataPersonal(postDataPersonal, dispatch)(data),
+	dataPersonalRequested: () => dispatch(dataPersonalRequested()),
+	dataPersonalPosted: (data) => dispatch(dataPersonalPosted(data)),
+	dataPersonalError: (error) => dispatch(dataPersonalError(error))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormPersonalData);
+export default compose(
+	withAdminAccountService(mapMethodsToProps),
+	connect(mapStateToProps, mapDispatchToProps)
+)(FormPersonalData);
