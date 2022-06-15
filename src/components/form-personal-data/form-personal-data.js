@@ -13,6 +13,10 @@ import styles from './form-personal-data.m.less';
 
 class FormPersonalData extends Component {
 
+	state = {
+		image: null
+	};
+
 	handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -20,8 +24,13 @@ class FormPersonalData extends Component {
 		const objForm = JSON.stringify(Object.fromEntries(formData.entries(formData)));
 		this.props.dataPersonalRequested();
 		//this.props.postingDataPersonal(objForm);
-		this.props.postDataPersonal(objForm)
-			.then(data => {this.props.dataPersonalPosted(data); console.log(data, '222ggg');})
+		this.props.postDataPersonal(formData)
+			.then(data => {
+				this.props.dataPersonalPosted(data); 
+				console.log(data, '222ggg', data.photo);
+				this.setState({image: (<img src={`data:${data.imagePhotoType};base64, ${data.photo}`} alt="ffff" />)});
+				//this.state.image = <image src={`data:image/png;base64, ${data.photo}`} alt="ffff" />;
+			})
 			.catch(error => {this.props.dataPersonalError(error); console.log(error, '444ererer');});
 	}
 
@@ -41,7 +50,7 @@ class FormPersonalData extends Component {
 										Загрузить фото
 							</label>
 							<input type="file" id="photo" name="photo"
-										accept="image/jpeg, image/png, image/svg"
+										accept="image/jpeg, image/png"
 										className={styles.inputPhotoPersonal} disabled={disabled} />
 						</div>
 						<div className={styles.blockTextData}>
@@ -74,6 +83,7 @@ class FormPersonalData extends Component {
 						</svg>
 					</p>
 				</button>
+				{this.state.image}
 			</div>
 		);
 	}

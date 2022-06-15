@@ -25,8 +25,8 @@ export default class AdminAccountService {
 			method: 'POST',
 			headers: {
 				'Access-Control-Allow-Origin': '*',
-				'Content-type': 'application/json',
-				'Accept': 'application/json',
+				//'Content-type': 'application/json',
+				//'Accept': 'application/json',
 				//'Origin': '*'
 			},
 			body: data

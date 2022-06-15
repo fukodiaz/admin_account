@@ -5,6 +5,7 @@ class PersonalData extends Entity {}
 
 const personalDataSchema = new Schema(PersonalData, {
 	photo: {type: 'string'},
+	imagePhotoType: {type: 'string'},
 	fio: {type: 'string'},
 	email: {type: 'string'}
 });
