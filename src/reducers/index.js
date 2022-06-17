@@ -2,11 +2,31 @@ const initialState = {
 	flagEditingPersonal: true,
 	flagOpenItem: true,
 
-	dataPersonalPosted: {},
+	dataPersonal: null,
 	dataPersonalSending: false,
-	dataPersonalError: false
+	dataPersonalError: false,
+
+	photoPersonal: null,
+	photoPersonalSending: false,
+	photoPersonalError: false,
+
+	fio: null,
+	email: null
 };
 
+const inputValueDefine = (action) => {
+	switch (action.fieldName) {
+		case 'fio':
+			return {
+				fio: action.payload
+			}
+		case 'email':
+			return {
+				email: action.payload
+			}
+		default: return {}
+	}
+};
 
 const reducer = (state = initialState, action) => {
 
@@ -28,7 +48,7 @@ const reducer = (state = initialState, action) => {
 		case 'POST_DATA_PERSONAL_REQUEST':
 			return {
 				...state,
-				dataPersonalPosted: {},
+				dataPersonal: null,
 				dataPersonalSending: true,
 				dataPersonalError: false
 			}
@@ -36,19 +56,49 @@ const reducer = (state = initialState, action) => {
 		case 'POST_DATA_PERSONAL_SUCCESS':
 			return {
 				...state,
-				dataPersonalPosted: action.payload,
+				dataPersonal: action.payload,
 				dataPersonalSending: false,
-				dataPersonalError: false
+				dataPersonalError: false,
+				flagEditingPersonal: true
 			}
 
 		case 'POST_DATA_PERSONAL_FAILURE':
 			return {
 				...state,
-				dataPersonalPosted: {},
+				dataPersonal: null,
 				dataPersonalSending: false,
 				dataPersonalError: action.payload
 			}
 		
+		case 'POST_PHOTO_PERSONAL_REQUEST':
+			return {
+				...state,
+				photoPersonal: null,
+				photoPersonalSending: true,
+				photoPersonalError: false
+			}
+
+		case 'POST_PHOTO_PERSONAL_SUCCESS':
+			return {
+				...state,
+				photoPersonal: action.payload,
+				photoPersonalSending: false,
+				photoPersonalError: false
+			}
+
+		case 'POST_PHOTO_PERSONAL_FAILURE':
+			return {
+				...state,
+				photoPersonal: null,
+				photoPersonalSending: false,
+				photoPersonalError: action.payload
+			}
+
+		case 'INPUT_CHANGED':
+			return {
+				...state,
+				...inputValueDefine(action) 
+			}
 
 		default: 
 			return state;

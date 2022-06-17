@@ -43,9 +43,14 @@ export default class AdminAccountService {
 		return res;
 	};
 
-	postDataPersonal = async (json) => {
-		const res = await this.postData(`/personalData`, json);
+	postDataPersonal = async (data) => {
+		const res = await this.postData(`/personalData`, data);
 		return res;		
+	}
+
+	postPhotoPersonal = async (data) => {
+		const res = await this.postData(`/personalPhoto`, data);
+		return res;
 	}
 
 }

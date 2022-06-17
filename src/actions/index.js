@@ -33,21 +33,33 @@ const dataPersonalError = (payload) => ({
 	payload
 }); 
 
-// const postingDataPersonal = (methodService, dispatch) => (data) => {
-// 	console.log(data, 2222);
-// 	dispatch(dataPersonalRequested());
-// 	methodService(data)
-// 		.then(resData => {dispatch(dataPersonalPosted(resData)); console.log(resData);})
-// 		.catch(error => dispatch(dataPersonalError(error)));
-// };
+const photoPersonalRequested = () => ({type: 'POST_PHOTO_PERSONAL_REQUEST'});
 
+const photoPersonalPosted = (payload) => ({
+	type: 'POST_PHOTO_PERSONAL_SUCCESS',
+	payload
+}); 
+
+const photoPersonalError = (payload) => ({
+	type: 'POST_PHOTO_PERSONAL_FAILURE',
+	payload
+}); 
+
+const inputChanged = (fieldName, payload) => ({
+	type: 'INPUT_CHANGED',
+	fieldName,
+	payload
+});
 
 export {
 	fetchOffers,
 	editingPersonalData,
 	openItemList,
-	//postingDataPersonal,
 	dataPersonalRequested,
 	dataPersonalPosted,
-	dataPersonalError
+	dataPersonalError,
+	photoPersonalRequested,
+	photoPersonalPosted,
+	photoPersonalError,
+	inputChanged
 };

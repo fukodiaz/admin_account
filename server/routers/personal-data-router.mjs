@@ -19,7 +19,6 @@ router.post('/', busboy({immediate: true}), async (req, res, next) => { //multer
 	let imagePhotoType = null;
 
 	req.busboy.on('file', (fieldName, file, info) => {
-
 		const {filename, encoding, mimeType} = info;
 
 		imagePhotoType = mimeType;
@@ -57,57 +56,5 @@ router.post('/', busboy({immediate: true}), async (req, res, next) => { //multer
 		res.send(await personalDataRepository.fetch(id));
 	});
 
-
-
-
-
-
-	//const instancePersonalData = await personalDataRepository.fetch(personalData.entityId);
-	// let photoData = await Object.entries(instancePersonalData)
-	// 										.filter(item => item[0] === 'photo')
-	// 										.map(item => item[0][1]);
-	//personalData.photo = req.body.photo || null;
-
-	// const bb = busboy({headers: req.headers});
-
-	// bb.on('file', (fieldname, file) => {
-	// 	file.on('data', (data) => {
-
-	// 		if (!photoData) {
-	// 				photoData = data;
-	// 		} else {
-	// 			photoData.concat([data]);
-	// 		}
-	// 	});
-
-	// 	//stream is done
-	// 	file.on('end', () => {
-	// 		client.set(
-	// 			`PersonalData:${personalData.entityId}`,
-	// 			`{photo: ${photoData}}`,
-	// 			(err, res) => {
-	// 				if (err) {next(err);} else {
-	// 					res.end();
-	// 				}
-	// 			}
-	// 		);
-	// 	});
-	// });
-
-	// req.pipe(bb);
-
-	// const object = {};
-	// req.body.forEach((value, key) => object[key] = value);
-	// const json = JSON.stringify(object);
-
-	/////personalData.fio = req.body.fio || null;
-	////personalData.email = req.body.email || null;
-
 	// personalData.fio = Object.entries(req.body).filter(item => item[0] === 'fio')[0][1] || null;
-	// personalData.email = Object.entries(req.body).filter(item => item[0] === 'email')[0][1] || null;
-
-	// let id = await personalDataRepository.save(personalData);
-
-	// res.send(await personalDataRepository.fetch(id));
-
 });

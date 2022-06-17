@@ -5,6 +5,7 @@ import cors from 'cors';
 import path from 'path';
 
 import {router as personalDataRouter} from './routers/personal-data-router.mjs';
+import {router as personalPhotoRouter} from './routers/personal-photo-router.mjs';
 
 const app = express();
 const PORT = 3000;
@@ -23,6 +24,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.static('dist'));
 
 app.use('/personalData', personalDataRouter);
+app.use('/personalPhoto', personalPhotoRouter);
 
 app.listen(PORT);
 
