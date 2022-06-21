@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { openItemList } from '../../actions';
+import { openBlock } from '../../actions';
 
 import FormPersonalData from '../form-personal-data';
 
@@ -10,13 +10,13 @@ class PersonalData extends Component {
 
 	render() {
 
-		const {flagOpenItem, openItemList} = this.props;
-		let contentItemList = flagOpenItem ? <FormPersonalData /> : null;
+		const {flagOpenPersonal, openBlock} = this.props;
+		let contentItemList = flagOpenPersonal ? <FormPersonalData /> : null;
 
 		return (
-			<li>
+			<li className={styles.itemPersonalData}>
 				<button className={styles.buttonPersonalData}
-							onClick={openItemList}>
+							onClick={openBlock}>
 					<h2 className={styles.headerPersonalData}>
 						Персональные данные
 					</h2>
@@ -27,12 +27,12 @@ class PersonalData extends Component {
 	}
 }
 
-const mapStateToProps = ({flagOpenItem}) => ({
-	flagOpenItem
+const mapStateToProps = ({flagOpenPersonal}) => ({
+	flagOpenPersonal
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	openItemList: () => dispatch(openItemList())
+	openBlock: () => dispatch(openBlock('personalData'))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PersonalData);

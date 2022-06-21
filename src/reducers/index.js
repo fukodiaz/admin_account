@@ -1,6 +1,8 @@
 const initialState = {
 	flagEditingPersonal: true,
-	flagOpenItem: true,
+	flagOpenPersonal: true,
+
+	flagOpenNews: true,
 
 	dataPersonal: null,
 	dataPersonalSending: false,
@@ -11,7 +13,60 @@ const initialState = {
 	photoPersonalError: false,
 
 	fio: null,
-	email: null
+	email: null,
+
+
+	flagOpenModalNews: false,
+	headingModal: null,
+
+	dataNews: [
+		{
+			urlImage: 'images/Charleroi.jpg',
+			date: new Date().toLocaleDateString(),
+			theme: 'Проект расписания ГИА-11'
+		},
+		{
+			urlImage: 'images/Charleroi.jpg',
+			date: new Date().toLocaleDateString(),
+			theme: 'Проект расписания ГИА-11'
+		},
+		{
+			urlImage: 'images/Charleroi.jpg',
+			date: new Date().toLocaleDateString(),
+			theme: 'Проект расписания ГИА-11'
+		},
+		{
+			urlImage: 'images/Charleroi.jpg',
+			date: new Date().toLocaleDateString(),
+			theme: 'Проект расписания ГИА-11'
+		},
+		{
+			urlImage: 'images/Charleroi.jpg',
+			date: new Date().toLocaleDateString(),
+			theme: 'Проект расписания ГИА-11'
+		},
+		{
+			urlImage: 'images/Charleroi.jpg',
+			date: new Date().toLocaleDateString(),
+			theme: 'Проект расписания ГИА-11'
+		}
+	]
+};
+
+const openBlock = (state, action) => {
+	switch (action.blockName) {
+		case 'personalData':
+			return {
+				flagOpenPersonal: !state.flagOpenPersonal,
+				flagEditingPersonal: true
+			}
+		case 'newsEditing':
+			return {
+				flagOpenNews: !state.flagOpenNews,
+			}
+		
+		default: return {}
+	}
 };
 
 const inputValueDefine = (action) => {
@@ -38,11 +93,12 @@ const reducer = (state = initialState, action) => {
 			flagEditingPersonal: !state.flagEditingPersonal
 			}
 
-		case 'OPEN_ITEM_LIST':
+		case 'OPEN_BLOCK':
 			return {
 				...state,
-				flagOpenItem: !state.flagOpenItem,
-				flagEditingPersonal: true
+				...openBlock(state, action)
+				// flagOpenPersonal: !state.flagOpenPersonal,
+				// flagEditingPersonal: true
 			}
 
 		case 'POST_DATA_PERSONAL_REQUEST':
@@ -98,6 +154,15 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				...inputValueDefine(action) 
+			}
+
+
+		//News
+		case 'OPEN_MODAL_CREATION_NEWS':
+			return {
+				...state,
+				flagOpenModalNews: !state.flagOpenModalNews,
+				headingModal: 'Создать новость'
 			}
 
 		default: 

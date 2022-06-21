@@ -5,6 +5,7 @@ import NewsEditing from '../news-editing';
 import ManagementDirectories from '../management-directories';
 import ManagementUsers from '../management-users';
 import StructureOrganizational from '../structure-organizational';
+import ModalNews from '../modal-news';
 
 import styles from './app.m.less';
 
@@ -23,6 +24,7 @@ export default class App extends Component {
 					<ManagementUsers />
 					<StructureOrganizational />
 				</ul>
+				<ModalNews />
 			</div>
 		);
 	}

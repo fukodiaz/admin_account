@@ -19,7 +19,10 @@ const fetchOffers = (methodService, dispatch) => () => {
 
 const editingPersonalData = () => ({type: 'EDITING_PERSONAL_DATA'});
 
-const openItemList = () => ({type: 'OPEN_ITEM_LIST'});
+const openBlock = (blockName) => ({
+	type: 'OPEN_BLOCK',
+	blockName
+});
 
 const dataPersonalRequested = () => ({type: 'POST_DATA_PERSONAL_REQUEST'});
 
@@ -51,15 +54,21 @@ const inputChanged = (fieldName, payload) => ({
 	payload
 });
 
+
+//News
+
+const openModalCreationNews = () => ({type: 'OPEN_MODAL_CREATION_NEWS'});
+
 export {
 	fetchOffers,
 	editingPersonalData,
-	openItemList,
+	openBlock,
 	dataPersonalRequested,
 	dataPersonalPosted,
 	dataPersonalError,
 	photoPersonalRequested,
 	photoPersonalPosted,
 	photoPersonalError,
-	inputChanged
+	inputChanged,
+	openModalCreationNews
 };

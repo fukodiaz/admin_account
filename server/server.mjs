@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 import express from 'express';
 import cors from 'cors';
-import path from 'path';
+import createPath from './helpers/create-path.mjs';
 
 import {router as personalDataRouter} from './routers/personal-data-router.mjs';
 import {router as personalPhotoRouter} from './routers/personal-photo-router.mjs';
@@ -16,8 +16,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-const createPath = (page) => path.resolve(__dirname,'dist',`${page}.html`);
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));

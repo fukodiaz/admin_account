@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { personalPhotoRepository } from '../om/personal-photo.mjs';
+import { personalPhotoRepository } from '../models/personal-photo.mjs';
 
 import busboy from 'connect-busboy';
 

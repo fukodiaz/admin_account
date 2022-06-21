@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {personalDataRepository} from '../om/personal-data.mjs';
+import {personalDataRepository} from '../models/personal-data.mjs';
 
 //import multer from 'multer';
 //import busboy from 'busboy';

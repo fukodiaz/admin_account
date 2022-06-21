@@ -53,10 +53,8 @@ class FormPersonalData extends Component {
 	}
 
 	render() {
-		const {flagEditingPersonal, editingPersonalData, dataPersonal,
-				photoPersonal, fio, email, inputChanged} = this.props;
-		console.log(flagEditingPersonal, 22);
-		console.log(fio,22, email, 333);
+		const {flagEditingPersonal, editingPersonalData,
+					fio, email, inputChanged} = this.props;
 		let classForm = flagEditingPersonal ? 'formPersonal' : 'formActive';
 		let disabled = flagEditingPersonal ? true : false;
 
