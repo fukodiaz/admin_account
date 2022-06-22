@@ -2,20 +2,26 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import {openModalCreationNews} from '../../actions';
+import { openModal } from '../../utils';
 
 import ListNews from '../list-news';
 import styles from './container-news.m.less';
 
 class ContainerNews extends Component {
 
+	createNews = () => {
+		this.props.openModalCreationNews();
+		openModal('[class^="modalBox"]');
+	};
+
 	render () {
-		const {openModalCreationNews} = this.props;
+		//const {openModalCreationNews} = this.props;
 
 		return (
 			<div className={styles.containerNews}>
 				<ListNews />
 				<button type="button" className={styles.btnCreateNews}
-							onClick={openModalCreationNews}>
+							onClick={this.createNews}>
 					Создать новость
 				</button>
 				<button type="button" className={styles.btnShowAllNews}
