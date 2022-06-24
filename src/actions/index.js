@@ -59,6 +59,44 @@ const inputChanged = (fieldName, payload) => ({
 
 const openModalCreationNews = () => ({type: 'OPEN_MODAL_CREATION_NEWS'});
 
+const newsListRequested = () => ({type: 'FETCH_NEWS_LIST_REQUEST'});
+
+const newsListLoaded = (payload) => ({
+		type: 'FETCH_NEWS_LIST_SUCCESS',
+		payload
+});
+
+const newsListError = (payload) => ({
+	type: 'FETCH_NEWS_LIST_FAILURE',
+	payload
+});
+
+const showAllNews = () => ({type: 'SHOW_ALL_NEWS'});
+
+const newsImageRequested = () => ({type: 'POST_NEWS_IMAGE_REQUEST'});
+
+const newsImagePosted = (payload) => ({
+	type: 'POST_NEWS_IMAGE_SUCCESS',
+	payload
+}); 
+
+const newsImageError = (payload) => ({
+	type: 'POST_NEWS_IMAGE_FAILURE',
+	payload
+}); 
+
+const newsDataRequested = () => ({type: 'POST_NEWS_DATA_REQUEST'});
+
+const newsDataPosted = (payload) => ({
+	type: 'POST_NEWS_DATA_SUCCESS',
+	payload
+}); 
+
+const newsDataError = (payload) => ({
+	type: 'POST_NEWS_DATA_FAILURE',
+	payload
+}); 
+
 export {
 	fetchOffers,
 	editingPersonalData,
@@ -70,5 +108,15 @@ export {
 	photoPersonalPosted,
 	photoPersonalError,
 	inputChanged,
-	openModalCreationNews
+	openModalCreationNews,
+	newsImageRequested,
+	newsImagePosted,
+	newsImageError,
+	newsDataRequested,
+	newsDataPosted,
+	newsDataError,
+	newsListRequested,
+	newsListLoaded,
+	newsListError,
+	showAllNews
 };

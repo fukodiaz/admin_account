@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {openModalCreationNews} from '../../actions';
+import {openModalCreationNews, showAllNews} from '../../actions';
 import { openModal } from '../../utils';
 
 import ListNews from '../list-news';
@@ -15,7 +15,7 @@ class ContainerNews extends Component {
 	};
 
 	render () {
-		//const {openModalCreationNews} = this.props;
+		const {showAllNews} = this.props;
 
 		return (
 			<div className={styles.containerNews}>
@@ -25,7 +25,7 @@ class ContainerNews extends Component {
 					Создать новость
 				</button>
 				<button type="button" className={styles.btnShowAllNews}
-							onClick={() => {}}>
+							onClick={showAllNews}>
 					Показать все новости
 				</button>
 			</div>
@@ -38,7 +38,8 @@ class ContainerNews extends Component {
 // });
 
 const mapDispatchToProps = (dispatch) => ({
-	openModalCreationNews: () => dispatch(openModalCreationNews())
+	openModalCreationNews: () => dispatch(openModalCreationNews()),
+	showAllNews: () => dispatch(showAllNews())
 });
 
 export default connect(undefined, mapDispatchToProps)(ContainerNews);

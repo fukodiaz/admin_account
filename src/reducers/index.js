@@ -19,38 +19,19 @@ const initialState = {
 	flagOpenModalNews: false,
 	headingModal: null,
 
-	dataNews: [
-		{
-			urlImage: 'images/Charleroi.jpg',
-			date: new Date().toLocaleDateString(),
-			theme: 'Проект расписания ГИА-11'
-		},
-		{
-			urlImage: 'images/Charleroi.jpg',
-			date: new Date().toLocaleDateString(),
-			theme: 'Проект расписания ГИА-11'
-		},
-		{
-			urlImage: 'images/Charleroi.jpg',
-			date: new Date().toLocaleDateString(),
-			theme: 'Проект расписания ГИА-11'
-		},
-		{
-			urlImage: 'images/Charleroi.jpg',
-			date: new Date().toLocaleDateString(),
-			theme: 'Проект расписания ГИА-11'
-		},
-		{
-			urlImage: 'images/Charleroi.jpg',
-			date: new Date().toLocaleDateString(),
-			theme: 'Проект расписания ГИА-11'
-		},
-		{
-			urlImage: 'images/Charleroi.jpg',
-			date: new Date().toLocaleDateString(),
-			theme: 'Проект расписания ГИА-11'
-		}
-	]
+	newsList: null,
+	newsListLoading: false,
+	newsListError: false,
+	visibleNewsList: null,
+	flagAllNews: true,
+
+	newsImage: null,
+	newsImageSending: false,
+	newsImageError: false,
+
+	newsData: null,
+	newsDataSending: false,
+	newsDataError: false,
 };
 
 const openBlock = (state, action) => {
@@ -82,6 +63,16 @@ const inputValueDefine = (action) => {
 		default: return {}
 	}
 };
+
+const defineVisibleNews = (state) => {
+	switch (state.flagAllNews) {
+		case true:
+			return state.newsList
+		case false:
+			return state.newsList.slice(0, 3)
+	}
+};
+
 
 const reducer = (state = initialState, action) => {
 
@@ -163,6 +154,87 @@ const reducer = (state = initialState, action) => {
 				...state,
 				flagOpenModalNews: !state.flagOpenModalNews,
 				headingModal: 'Создать новость'
+			}
+
+		case 'FETCH_NEWS_LIST_REQUEST':
+			return {
+				...state,
+				newsList: null,
+				newsListLoading: true,
+				newsListError: false,
+			}
+			
+		case 'FETCH_NEWS_LIST_SUCCESS':
+			return {
+				...state,
+				newsList: action.payload,
+				newsListLoading: false,
+				newsListError: false,
+				visibleNewsList: action.payload.slice(0, 3)
+			}
+
+		case 'FETCH_NEWS_LIST_FAILURE':
+			return {
+				...state,
+				newsList: null,
+				newsListLoading: false,
+				newsListError: action.payload,
+			}
+
+		case 'SHOW_ALL_NEWS':
+			return {
+				...state,
+				flagAllNews: !state.flagAllNews,
+				visibleNewsList: defineVisibleNews(state)
+			}
+
+		case 'POST_NEWS_IMAGE_REQUEST':
+			return {
+				...state,
+				newsImage: null,
+				newsImageSending: true,
+				newsImageError: false
+			}
+
+		case 'POST_NEWS_IMAGE_SUCCESS':
+			return {
+				...state,
+				newsImage: action.payload,
+				newsImageSending: false,
+				newsImageError: false
+			}
+
+		case 'POST_NEWS_IMAGE_FAILURE':
+			return {
+				...state,
+				newsImage: null,
+				newsImageSending: false,
+				newsImageError: action.payload
+			}
+
+		case 'POST_NEWS_DATA_REQUEST':
+			return {
+				...state,
+				//newsData: null,
+				newsDataSending: true,
+				newsDataError: false
+			}
+
+		case 'POST_NEWS_DATA_SUCCESS':
+			return {
+				...state,
+				//newsData: action.payload,
+				newsList: action.payload,
+				newsDataSending: false,
+				newsDataError: false
+			}
+
+		case 'POST_NEWS_DATA_FAILURE':
+			return {
+				...state,
+				//newsData: null,
+				newsDataSending: false,
+				newsDataError: action.payload
 			}
 
 		default: 

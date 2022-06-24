@@ -26,9 +26,9 @@ router.post('/', busboy({immediate: true}), async (req, res, next) => { //multer
 
 		file.on('data', (data) => {
 			if (photoData === null) {
-				photoData = data.toString('base64');
+				photoData = data;
 			} else {
-				photoData = Buffer.concat([photoData, data]).toString('base64');
+				photoData = Buffer.concat([photoData, data]);
 			}
 		});
 	});
@@ -48,7 +48,7 @@ router.post('/', busboy({immediate: true}), async (req, res, next) => { //multer
 
 		personalData.fio = fio;
 		personalData.email = email;
-		personalData.photo = photoData;
+		personalData.photo = photoData.toString('base64');
 		personalData.imagePhotoType = imagePhotoType;
 
 		let id = await personalDataRepository.save(personalData);

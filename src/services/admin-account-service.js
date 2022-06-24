@@ -13,8 +13,13 @@ export default class AdminAccountService {
 		return res.json();
 	}; 
 
-	getListOffers = async () => {
-		const res = await this.getResource(`/offers`);
+	// getListOffers = async () => {
+	// 	const res = await this.getResource(`/offers`);
+	// 	return res;
+	// };
+
+	getNewsList = async () => {
+		const res = await this.getResource(`/newsData`);
 		return res;
 	};
 
@@ -51,6 +56,16 @@ export default class AdminAccountService {
 	postPhotoPersonal = async (data) => {
 		const res = await this.postData(`/personalPhoto`, data);
 		return res;
+	}
+
+	postNewsImage = async (data) => {
+		const res = await this.postData(`/newsImage`, data);
+		return res;
+	}
+
+	postNewsData = async (data) => {
+		const res = await this.postData(`/newsData`, data);
+		return res;		
 	}
 
 }

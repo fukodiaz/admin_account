@@ -6,6 +6,8 @@ import createPath from './helpers/create-path.mjs';
 
 import {router as personalDataRouter} from './routers/personal-data-router.mjs';
 import {router as personalPhotoRouter} from './routers/personal-photo-router.mjs';
+import {router as newsImageRouter} from './routers/news-image-router.mjs';
+import {router as newsRouter} from './routers/news-router.mjs';
 
 const app = express();
 const PORT = 3000;
@@ -23,6 +25,8 @@ app.use(express.static('dist'));
 
 app.use('/personalData', personalDataRouter);
 app.use('/personalPhoto', personalPhotoRouter);
+app.use('/newsImage', newsImageRouter);
+app.use('/newsData', newsRouter);
 
 app.listen(PORT);
 

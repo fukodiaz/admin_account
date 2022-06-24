@@ -31,6 +31,7 @@
     "webpack-dev-server": "^4.7.4"
   },
   "dependencies": {
+    "@node-redis/json": "^1.0.2",
     "busboy": "^1.6.0",
     "connect-busboy": "^1.0.0",
     "cors": "^2.8.5",
@@ -50,6 +51,6 @@
     "rk": "^1.0.0"
   },
   "engines": {
-	"node": "16.15.1"
+    "node": "16.15.1"
   }
 }

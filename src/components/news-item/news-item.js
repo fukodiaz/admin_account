@@ -4,13 +4,13 @@ import styles from './news-item.m.less';
 import pencil from './pencil.svg';
 import trash from './trash.svg';
 
-const NewsItem = ({urlImage, date, theme}) => {
+const NewsItem = ({image, imageType, date, theme, entityId}) => {
 
 	return (
-		<li key={(Math.random()*100).toFixed(0)}
+		<li key={entityId}
 				className={styles.newsItem}>
 			<div className={styles.boxNews}>
-				<img src={urlImage} alt="photo news"
+				<img src={`data:${imageType};base64, ${image}`} alt="photo news"
 						className={styles.imageNews}/>
 				<p className={styles.dateNews}>
 					{date}

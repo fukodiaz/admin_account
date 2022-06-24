@@ -18,9 +18,9 @@ router.post('/', busboy({immediate: true}), async(req, res, next) => {
 
 		file.on('data', (data) => {
 			if (photoData === null) {
-				photoData = data.toString('base64');
+				photoData = data;
 			} else {
-				photoData = Buffer.concat([photoData, data]).toString('base64');
+				photoData = Buffer.concat([photoData, data]);
 			}
 		});
 	});
@@ -29,7 +29,7 @@ router.post('/', busboy({immediate: true}), async(req, res, next) => {
 	req.busboy.on('finish', async () => {
 		//if (!photoData) next(new Error('file binary data cannot be null'));
 
-		personalPhoto.photo = photoData;
+		personalPhoto.photo = photoData.toString('base64');
 		personalPhoto.imagePhotoType = imagePhotoType;
 
 		let id = await personalPhotoRepository.save(personalPhoto);
