@@ -5,7 +5,33 @@ import styles from './form-news.m.less';
 import download from './download.svg';
 
 const FormNews = (props) => {
-	const {onChangeImage, nameFileImage='', handleSubmit} = props;
+	const {onChangeImage, nameFileImage,
+			handleSubmit, inputChanged,
+			theme, text, urlImage} = props;
+
+	const changeStyleValidInput = (e) => {
+		if (e.target.value !== '') {
+			e.currentTarget.style.outline='none';
+		}
+	}
+
+	const inputChangedTheme = (e) => {
+		inputChanged('theme', e.target.value);
+		changeStyleValidInput(e);
+	}
+
+	const inputChangedText = (e) => {
+		inputChanged('text', e.target.value);
+		changeStyleValidInput(e);
+	}
+
+	const inputChangedUrl = (e) => {
+		inputChanged('url', e.target.value);
+		if (e.target.value !== '') {
+			e.currentTarget.style.outline='none';
+			document.querySelector('[class^="boxFileImage"]').style.outline='none';
+		}
+	}
 
 	return (
 		<div className={styles.containerFormNews}>
@@ -16,19 +42,20 @@ const FormNews = (props) => {
 						Тема
 					</label>
 					<input type="text" name="theme" 
-								onChange={() => {}}
-								//value={fio} 
+								onChange={inputChangedTheme}
+								value={theme} 
 								className={styles.inputThemeNews} 
 								placeholder="Введите текст" 
-								id="theme" required />
+								id="theme" />
 				</div>
 				<div className={styles.blockTextNews}>
 					<label htmlFor="text" className={styles.labelTextNews}>
 						Текст
 					</label>
 					<textarea name="text" className={styles.textareaNews}
-								placeholder="Введите текст"
-								id="text" required />
+								onChange={inputChangedText}
+								value={text} placeholder="Введите текст"
+								id="text" />
 				</div>
 
 				<div className={styles.blockImageNews}>
@@ -37,8 +64,8 @@ const FormNews = (props) => {
 							Ссылка
 						</label>
 						<input type="url" name="url" 
-									onChange={() => {}}
-									//value={fio} 
+									onChange={inputChangedUrl}
+									value={urlImage}
 									className={styles.inputLinkImage} 
 									placeholder="Вставьте ссылку" 
 									id="link" />
@@ -57,7 +84,6 @@ const FormNews = (props) => {
 						</label>
 						<input type="file" name="image"
 									onChange={onChangeImage}
-									//value={fio} 
 									className={styles.inputFileImage} 
 									id="image" accept="image/jpeg, image/png" />
 					</div>

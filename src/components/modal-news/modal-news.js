@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import {compose, withAdminAccountService} from '../hoc';
 import {newsImageRequested, newsImagePosted, 
 			newsImageError, newsDataRequested, 
-			newsDataPosted, newsDataError} from '../../actions';
+			newsDataPosted, newsDataError, inputChanged,
+			putNewsRequested, putNewsSuccess, putNewsError} from '../../actions';
 
 import FormNews from '../form-news';
 import {onClickModalBox, hideModal} from '../../utils';
@@ -12,47 +13,85 @@ import styles from './modal-news.m.less';
 
 class ModalNews extends Component {
 
-	state = { nameFileImage: null };
-
 	handleKeyDown = (e) => {
 		if (e.code === 'Escape' && document.querySelector('[class^="modalBox"]').style.display === 'block') {
 			hideModal('[class^="modalBox"]');
 		}
 	}
 
+	changeStyleInvalidInput = (selector) => {
+		document.querySelector(selector).style.outline='3px solid rgba(226, 79, 79, 0.8)';
+		document.querySelector(selector).style.outlineOffset='-2px';
+	}
+
 	handleSubmit = (e) => {
 		e.preventDefault();
+		const {postNewsData, newsDataRequested, newsDataPosted, newsDataError, 
+			theme, text, urlImage, imageFile, methodNews, entityId,
+			putNewsData, putNewsRequested, putNewsSuccess, putNewsError} = this.props;
 
-		const formData = new FormData(e.target);
-		this.props.newsDataRequested();
+		if (theme === '' || text === '' || !urlImage && !imageFile) {
+			if (theme === '') {
+				this.changeStyleInvalidInput('[class^="inputThemeNews"]');
+			}
+			if (text === '') {
+				this.changeStyleInvalidInput('[class^="textareaNews"]');
+			}
+			if (!urlImage && !imageFile) {
+				this.changeStyleInvalidInput('[class^="inputLinkImage"]');
+				this.changeStyleInvalidInput('[class^="boxFileImage"]');
+			}
+			return null;}
 
-		this.props.postNewsData(formData)
-			.then(data => {
-				this.props.newsDataPosted(data); 
-				console.log(data, '222ggg');
-			})
-			.catch(error => {this.props.newsDataError(error); console.log(error, '444ererer');})
-			.finally(() => {
-				e.target.reset();
-				hideModal('[class^="modalBox"]');
-			});
+			const formData = new FormData(e.target);
+
+			if (methodNews === 'PUT') {
+				putNewsRequested();
+				putNewsData(entityId, formData)
+					.then(data => {
+						putNewsSuccess(data);
+						console.log(data, '222put');
+					})
+					.catch(error => {putNewsError(error); console.log(error, '444erput');})
+					.finally(() => {
+						e.target.reset();
+						hideModal('[class^="modalBox"]');
+					});
+			}
+
+			if (methodNews === 'POST') {
+				newsDataRequested();
+				postNewsData(formData)
+					.then(data => {
+						newsDataPosted(data); 
+						console.log(data, '222ggg');
+					})
+					.catch(error => {newsDataError(error); console.log(error, '444ererer');})
+					.finally(() => {
+						e.target.reset();
+						hideModal('[class^="modalBox"]');
+					});
+				} 
 	}
 
 	onChangeImage = (e) => {
 		e.preventDefault();
 
 		if (e.target.files[0]) {
+			this.props.inputChanged('image', true);
+			document.querySelector('[class^="inputLinkImage"]').style.outline='none';
+			document.querySelector('[class^="boxFileImage"]').style.outline='none';
+
 			const formData = new FormData();
 			formData.append('image', e.target.files[0]);
 			this.props.newsImageRequested();
 
 			this.props.postNewsImage(formData)
 				.then(data => {
-					this.props.newsImagePosted(data); 
-					console.log(data, '222ggg', data.image);
-					if (data.image !== null) {
-						this.setState({nameFileImage: data.nameFileImage});
-					}
+					this.props.newsImagePosted(data);
+					// if (data.image !== null) {
+					// 	this.setState({nameFileImage: data.nameFileImage});
+					// }
 				})
 				.catch(error => {this.props.newsImageError(error); console.log(error, '444ererer');});
 		}
@@ -68,8 +107,8 @@ class ModalNews extends Component {
 
 
 	render() {
-		const {flagOpenModalNews, headingModal} = this.props;
-		//const classModalNews = flagOpenModalNews ? 'openedModalBox' : 'hiddenModalNews'; 
+		const {headingModal, inputChanged,theme, 
+				text, urlImage, nameFileImage} = this.props; 
 		return (
 			<div className={styles.modalBox}
 					onClick={(e) => onClickModalBox('[class^="modalBox"]', e)}>
@@ -79,7 +118,8 @@ class ModalNews extends Component {
 							{headingModal}
 						</h3>
 						<FormNews onChangeImage={this.onChangeImage} handleSubmit={this.handleSubmit}
-									nameFileImage={this.state.nameFileImage} />
+									inputChanged = {inputChanged} theme={theme} text={text}
+									urlImage={urlImage}	nameFileImage={nameFileImage} />
 					</div>
 				</div>
 			</div>
@@ -89,12 +129,14 @@ class ModalNews extends Component {
 
 const mapMethodsToProps = (adminAccountService) => ({
 	postNewsImage: adminAccountService.postNewsImage,
-	postNewsData: adminAccountService.postNewsData
+	postNewsData: adminAccountService.postNewsData,
+	putNewsData: adminAccountService.putNewsData
 });
 
-const mapStateToProps = ({flagOpenModalNews, headingModal, newsImage, newsData}) => ({
-	flagOpenModalNews, headingModal, 
-	newsImage, newsData
+const mapStateToProps = ({flagOpenModalNews, headingModal, newsImage, newsData, 
+	theme, text, urlImage, nameFileImage, methodNews, entityId}) => ({
+	flagOpenModalNews, headingModal, newsImage, newsData,theme,
+	text, urlImage, nameFileImage, methodNews, entityId
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -104,6 +146,10 @@ const mapDispatchToProps = (dispatch) => ({
 	newsDataRequested: () => dispatch(newsDataRequested()),
 	newsDataPosted: (data) => dispatch(newsDataPosted(data)),
 	newsDataError: (error) => dispatch(newsDataError(error)),
+	inputChanged: (fieldName, data) => dispatch(inputChanged(fieldName, data)),
+	putNewsRequested: () => dispatch(putNewsRequested()),
+	putNewsSuccess: (data) => dispatch(putNewsSuccess(data)),
+	putNewsError: (error) => dispatch(putNewsError(error))
 });
 
 export default compose(

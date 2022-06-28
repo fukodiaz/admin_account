@@ -68,4 +68,18 @@ export default class AdminAccountService {
 		return res;		
 	}
 
+	putNewsData = async (id, data) => {
+		const res = await fetch(`${this._apiBase}/newsData/${id}`, {
+			mode: 'cors',
+			method: 'PUT',
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				//'Content-type': 'multipart/form-data'
+			},
+			body: data
+		});
+	
+		return res.json();
+	};
+
 }

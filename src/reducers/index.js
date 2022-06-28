@@ -12,12 +12,14 @@ const initialState = {
 	photoPersonalSending: false,
 	photoPersonalError: false,
 
-	fio: null,
-	email: null,
+	fio: '',
+	email: '',
 
 
 	flagOpenModalNews: false,
 	headingModal: null,
+	methodNews: null,
+	entityId: null,
 
 	newsList: null,
 	newsListLoading: false,
@@ -32,6 +34,16 @@ const initialState = {
 	newsData: null,
 	newsDataSending: false,
 	newsDataError: false,
+
+	newsPutInit: false,
+	newsPutError: false,
+
+	theme: '',
+	text: '',
+	urlImage: '',
+	nameFileImage: '',
+	imageFile: null
+
 };
 
 const openBlock = (state, action) => {
@@ -59,6 +71,22 @@ const inputValueDefine = (action) => {
 		case 'email':
 			return {
 				email: action.payload
+			}
+		case 'theme': 
+			return {
+				theme: action.payload
+			}
+		case 'text': 
+			return {
+				text: action.payload
+			}
+		case 'url': 
+			return {
+				urlImage: action.payload
+			}
+		case 'image': 
+			return {
+				imageFile: action.payload
 			}
 		default: return {}
 	}
@@ -153,7 +181,25 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				flagOpenModalNews: !state.flagOpenModalNews,
-				headingModal: 'Создать новость'
+				headingModal: 'Создать новость',
+				methodNews: 'POST',
+				theme: '',
+				text: '',
+				urlImage: '',
+				nameFileImage: '',
+				imageFile: null
+			}
+
+		case 'OPEN_MODAL_EDIT_NEWS':
+			return {
+				...state,
+				headingModal: 'Редактировать новость',
+				methodNews: 'PUT',
+				entityId: action.payload.entityId,
+				theme: action.payload.theme || '',
+				text: action.payload.text || '',
+				urlImage: action.payload.urlImage || '',
+				nameFileImage: action.payload.nameFileImage || null
 			}
 
 		case 'FETCH_NEWS_LIST_REQUEST':
@@ -201,7 +247,8 @@ const reducer = (state = initialState, action) => {
 				...state,
 				newsImage: action.payload,
 				newsImageSending: false,
-				newsImageError: false
+				newsImageError: false,
+				nameFileImage: action.payload.nameFileImage
 			}
 
 		case 'POST_NEWS_IMAGE_FAILURE':
@@ -225,6 +272,7 @@ const reducer = (state = initialState, action) => {
 				...state,
 				//newsData: action.payload,
 				newsList: action.payload,
+				visibleNewsList: action.payload.slice(0, 3),
 				newsDataSending: false,
 				newsDataError: false
 			}
@@ -236,6 +284,30 @@ const reducer = (state = initialState, action) => {
 				newsDataSending: false,
 				newsDataError: action.payload
 			}
+
+
+		case 'PUT_NEWS_REQUEST':
+			return {
+				...state,
+				newsPutInit: true,
+				newsPutError: false,
+			}
+	
+			case 'PUT_NEWS_SUCCESS':
+				return {
+					...state,
+					newsList: action.payload,
+					visibleNewsList: action.payload.slice(0, 3),
+					newsPutInit: false,
+					newsPutError: false
+				}
+	
+			case 'PUT_NEWS_FAILURE':
+				return {
+					...state,
+					newsPutInit: false,
+					newsPutError: action.payload
+				}
 
 		default: 
 			return state;

@@ -59,6 +59,11 @@ const inputChanged = (fieldName, payload) => ({
 
 const openModalCreationNews = () => ({type: 'OPEN_MODAL_CREATION_NEWS'});
 
+const openModalEditNews = (payload) => ({
+	type: 'OPEN_MODAL_EDIT_NEWS',
+	payload
+});
+
 const newsListRequested = () => ({type: 'FETCH_NEWS_LIST_REQUEST'});
 
 const newsListLoaded = (payload) => ({
@@ -70,6 +75,13 @@ const newsListError = (payload) => ({
 	type: 'FETCH_NEWS_LIST_FAILURE',
 	payload
 });
+
+const fetchNewsList = (methodService, dispatch) => () => {
+	dispatch(newsListRequested());
+	methodService()
+		.then(data => dispatch(newsListLoaded(data)))
+		.catch(error => dispatch(newsListError(error)));
+};
 
 const showAllNews = () => ({type: 'SHOW_ALL_NEWS'});
 
@@ -95,6 +107,18 @@ const newsDataPosted = (payload) => ({
 const newsDataError = (payload) => ({
 	type: 'POST_NEWS_DATA_FAILURE',
 	payload
+});
+
+const putNewsRequested = () => ({type: 'PUT_NEWS_REQUEST'});
+
+const putNewsSuccess = (payload) => ({
+	type: 'PUT_NEWS_SUCCESS',
+	payload
+}); 
+
+const putNewsError = (payload) => ({
+	type: 'PUT_NEWS_FAILURE',
+	payload
 }); 
 
 export {
@@ -109,6 +133,7 @@ export {
 	photoPersonalError,
 	inputChanged,
 	openModalCreationNews,
+	openModalEditNews,
 	newsImageRequested,
 	newsImagePosted,
 	newsImageError,
@@ -118,5 +143,9 @@ export {
 	newsListRequested,
 	newsListLoaded,
 	newsListError,
-	showAllNews
+	fetchNewsList,
+	showAllNews,
+	putNewsRequested,
+	putNewsSuccess,
+	putNewsError
 };

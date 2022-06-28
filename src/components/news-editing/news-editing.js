@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { openBlock } from '../../actions';
 
-import ContainerNews from '../container-news';
+//import ContainerNews from '../container-news';
+import ListNews from '../list-news';
 
 import styles from './news-editing.m.less';
 
@@ -10,7 +11,7 @@ class NewsEditing extends Component {
 
 	render() {
 		const {flagOpenNews, openBlock} = this.props;
-		let contentNews = flagOpenNews ? <ContainerNews /> : null;
+		let contentNews = flagOpenNews ? <ListNews /> : null;
 
 		return (
 			<li>

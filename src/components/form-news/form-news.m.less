@@ -29,12 +29,17 @@
 	outline: none;
 	
 	&:focus, &:hover:focus {
-		border-color: rgba(160, 158, 158, 0.3);
+		//border: 1px solid rgba(160, 158, 158, 0.3) !important;
+		outline: none !important;
 	}
 
 	&:hover {
 		border-color: rgba(138, 136, 136, 0.9);
 	}
+
+	// &:invalid:required {
+	// 	border-color:rgba(226, 79, 79, 0.8);
+	// }
 }
 
 .textareaNews {
@@ -66,6 +71,7 @@
 
 .boxFileImage {
 	margin-left: auto;
+	border-radius: 3px;
 }
 
 .labelFileImage {

@@ -4,7 +4,7 @@ import styles from './news-item.m.less';
 import pencil from './pencil.svg';
 import trash from './trash.svg';
 
-const NewsItem = ({image, imageType, date, theme, entityId}) => {
+const NewsItem = ({image, imageType, date, theme, entityId, editNewsItem}) => {
 
 	return (
 		<li key={entityId}
@@ -19,7 +19,7 @@ const NewsItem = ({image, imageType, date, theme, entityId}) => {
 					{theme}
 				</p>
 				<button type="button" //className={styles.buttonEditing}
-						onClick={() => {}}>
+						onClick={editNewsItem}>
 					<p className={styles.svgBoxEdit}>
 						<svg width="100%" height="100%">
 							<use href={`${pencil}#pencil`}></use>
