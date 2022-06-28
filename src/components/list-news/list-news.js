@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import {compose, withAdminAccountService} from '../hoc';
-import {openModalCreationNews, showAllNews,
+import {openModalCreationNews, showAllNews, addIdNewsDeleted,
 			fetchNewsList, openModalEditNews} from '../../actions';
 import { openModal } from '../../utils';
 
 import NewsItem from '../news-item';
+import ModalConfirm from '../modal-confirm';
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 import styles from './list-news.m.less';
@@ -23,12 +24,19 @@ class ListNews extends Component {
 	};
 
 	createNewsItem = (data) => {
-		return <NewsItem {...data} editNewsItem={(e) => this.editNewsItem(e, data)} />;
+		const {entityId} = data;
+		return <NewsItem {...data} editNewsItem={(e) => this.editNewsItem(e, data)}
+								openModalConfirm={(e) => this.openModalConfirm(e, entityId)} />;
 	}
 
 	editNewsItem = (e, data) => {
 		this.props.openModalEditNews(data);
 		openModal('[class^="modalBox"]');
+	}
+
+	openModalConfirm = (e, idNewsDeleted) => {
+		this.props.addIdNewsDeleted(idNewsDeleted);
+		openModal('[class^="modalConfirm"]');
 	}
 
 	render() {
@@ -56,6 +64,7 @@ class ListNews extends Component {
 							onClick={showAllNews}>
 					Показать все новости
 				</button>
+				<ModalConfirm />
 			</div>
 		);
 	}
@@ -73,6 +82,7 @@ const mapDispatchToProps = (dispatch, {getNewsList}) => ({
 	openModalCreationNews: () => dispatch(openModalCreationNews()),
 	openModalEditNews: (data) => dispatch(openModalEditNews(data)),
 	showAllNews: () => dispatch(showAllNews()),
+	addIdNewsDeleted: (id) => dispatch(addIdNewsDeleted(id)),
 	fetchNewsList: () => fetchNewsList(getNewsList, dispatch)()
 });
 

@@ -4,7 +4,8 @@ import styles from './news-item.m.less';
 import pencil from './pencil.svg';
 import trash from './trash.svg';
 
-const NewsItem = ({image, imageType, date, theme, entityId, editNewsItem}) => {
+const NewsItem = ({image, imageType, date, theme,
+				entityId, editNewsItem, openModalConfirm}) => {
 
 	return (
 		<li key={entityId}
@@ -18,7 +19,7 @@ const NewsItem = ({image, imageType, date, theme, entityId, editNewsItem}) => {
 				<p className={styles.themeNews}>
 					{theme}
 				</p>
-				<button type="button" //className={styles.buttonEditing}
+				<button type="button" className={styles.buttonEdit}
 						onClick={editNewsItem}>
 					<p className={styles.svgBoxEdit}>
 						<svg width="100%" height="100%">
@@ -26,8 +27,8 @@ const NewsItem = ({image, imageType, date, theme, entityId, editNewsItem}) => {
 						</svg>
 					</p>
 				</button>
-				<button type="button" //className={styles.buttonEditing}
-						onClick={() => {}}>
+				<button type="button" className={styles.buttonDelete}
+						onClick={openModalConfirm}>
 					<p className={styles.svgBoxDelete}>
 						<svg width="100%" height="100%">	
 							<use href={`${trash}#trash`}></use>

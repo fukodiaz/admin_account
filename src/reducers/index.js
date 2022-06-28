@@ -38,11 +38,16 @@ const initialState = {
 	newsPutInit: false,
 	newsPutError: false,
 
+	newsDeleteInit: false,
+	newsDeleteError: false,
+
 	theme: '',
 	text: '',
 	urlImage: '',
 	nameFileImage: '',
-	imageFile: null
+	imageFile: null,
+
+	IdNewsDeleted: null
 
 };
 
@@ -307,6 +312,35 @@ const reducer = (state = initialState, action) => {
 					...state,
 					newsPutInit: false,
 					newsPutError: action.payload
+				}
+
+			case 'DELETE_NEWS_REQUEST':
+				return {
+					...state,
+					newsDeleteInit: true,
+					newsDeleteError: false,
+				}
+
+			case 'DELETE_NEWS_SUCCESS':
+				return {
+					...state,
+					newsList: action.payload,
+					visibleNewsList: action.payload.slice(0, 3),
+					newsDeleteInit: false,
+					newsDeleteError: false
+				}
+
+			case 'DELETE_NEWS_FAILURE':
+				return {
+					...state,
+					newsDeleteInit: false,
+					newsDeleteError: action.payload
+				}
+
+			case 'ADD_ID_NEWS_DELETED':
+				return {
+					...state,
+					IdNewsDeleted: action.payload
 				}
 
 		default: 

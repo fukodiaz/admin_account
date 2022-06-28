@@ -3,11 +3,8 @@ import {newsRepository} from '../models/news.mjs';
 import client from '../models/client.mjs';
 
 import busboy from 'connect-busboy';
-import multer from 'multer';
 
 export const router = Router();
-
-
 
 router.put('/:id', busboy({immediate: true}), async (req, res, next) => {
 
@@ -141,64 +138,15 @@ router.get('/', async (req, res) => {
 	res.send(result);
 });
 
+router.delete('/:id', async(req, res) => {
+		const newsId = req.params.id;
+		const prevNewsList = JSON.parse(await client.execute(['JSON.GET', 'newsList']));
+		const newsIndex = await prevNewsList.findIndex(({entityId}) => entityId === newsId);
 
-// router.put('/:id', busboy({immediate: true}), async (req, res, next) => {
-// 	//if (!req.busboy) throw new Error('file binary data cannot be null');
-// 	const newsId = req.params.id;
-// 	const prevNewsList = JSON.parse(await client.execute(['JSON.GET', 'newsList']));
-// 	const prevNews = prevNewsList.find(({entityId}) => entityId === newsId);
-// 	const newsIndex = prevNewsList.findIndex(({entityId}) => entityId === newsId);
+		await client.execute(['JSON.DEL', 'newsList', `$[${newsIndex}]`]);
+		const novelDataNewsList = await client.execute(['JSON.GET', 'newsList']);
 
-// 	let themePut = null;
-// 	let textPut = null;
-// 	let imagePut = null;
-// 	let urlImagePut = null;
-// 	let imageTypePut = null;
-// 	let nameFileImagePut = null;
+		res.send(novelDataNewsList);
+});
 
-// 	req.busboy.on('file', (fieldName, file, info) => {
-// 		const {filename, mimeType} = info;
-// 		imageTypePut = mimeType;
-// 		nameFileImagePut = filename;
 
-// 		file.on('data', (data) => {
-// 			if (imagePut === null) {
-// 				imagePut = data;
-// 				console.log(imagePut.toString('base64'));
-// 			} else {
-// 				imagePut = Buffer.concat([image, data]);
-// 			}
-// 		});
-// 	});
-
-// 	req.busboy.on('field', (fieldName, value) => {
-// 		switch(fieldName) {
-// 			case 'theme':
-// 				themePut = value;
-// 			case 'text':
-// 				textPut = value;
-// 			case 'url':
-// 				urlImagePut = value;
-// 		}
-// 	});
-
-// 	req.busboy.on('finish', async () => {
-// 		//if (!photoData) next(new Error('file binary data cannot be null'));
-
-// 		prevNews.theme = themePut;
-// 		prevNews.text = textPut;
-// 		prevNews.image = imagePut.toString('base64');
-// 		prevNews.imageType = imageTypePut;
-// 		prevNews.nameFileImage = nameFileImagePut;
-// 		prevNews.urlImage = urlImagePut;
-// 		console.log(textPut);
-		
-// 		const novelNewsList = [...prevNewsList.slice(0, newsIndex), prevNews, ...prevNewsList.slice(newsIndex + 1)];
-		
-// 		await client.execute(['JSON.SET', 'newsList', '$', JSON.stringify(novelNewsList)]);
-// 		const novelDataNewsList = await client.execute(['JSON.GET', 'newsList']);
-
-// 		res.send(novelDataNewsList);
-// 	});
-
-// });

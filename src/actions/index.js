@@ -121,6 +121,23 @@ const putNewsError = (payload) => ({
 	payload
 }); 
 
+const newsDeleteRequested = () => ({type: 'DELETE_NEWS_REQUEST'});
+
+const newsDeleted = (payload) => ({
+	type: 'DELETE_NEWS_SUCCESS',
+	payload
+});
+
+const newsDeleteError = (payload) => ({
+	type: 'DELETE_NEWS_FAILURE',
+	payload
+});
+
+const addIdNewsDeleted = (payload) => ({
+	type: 'ADD_ID_NEWS_DELETED',
+	payload
+});
+
 export {
 	fetchOffers,
 	editingPersonalData,
@@ -147,5 +164,9 @@ export {
 	showAllNews,
 	putNewsRequested,
 	putNewsSuccess,
-	putNewsError
+	putNewsError,
+	newsDeleteRequested,
+	newsDeleted,
+	newsDeleteError,
+	addIdNewsDeleted
 };

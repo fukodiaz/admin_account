@@ -30,7 +30,7 @@ class ModalNews extends Component {
 			theme, text, urlImage, imageFile, methodNews, entityId,
 			putNewsData, putNewsRequested, putNewsSuccess, putNewsError} = this.props;
 
-		if (theme === '' || text === '' || !urlImage && !imageFile) {
+		if (theme === '' || text === '' || (!urlImage && !imageFile)) {
 			if (theme === '') {
 				this.changeStyleInvalidInput('[class^="inputThemeNews"]');
 			}
@@ -78,7 +78,7 @@ class ModalNews extends Component {
 		e.preventDefault();
 
 		if (e.target.files[0]) {
-			this.props.inputChanged('image', true);
+			this.props.inputChanged('image', e.target.files[0]);
 			document.querySelector('[class^="inputLinkImage"]').style.outline='none';
 			document.querySelector('[class^="boxFileImage"]').style.outline='none';
 
