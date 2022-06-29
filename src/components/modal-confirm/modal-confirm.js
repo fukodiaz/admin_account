@@ -40,7 +40,7 @@ const ModalConfirm = (props) => {
 			<div className={styles.modalNewsDialog}>
 				<div className={styles.modalNewsContent}>
 					<h3 className={styles.headingModal}>
-						Вы действительно хотите удалить новость ?
+						Вы действительно хотите <br /> удалить новость ?
 					</h3>
 					<div className={styles.boxButtons}>
 						<button type="submit" className={styles.btnConfirm}

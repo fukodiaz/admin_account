@@ -4,14 +4,16 @@ import styles from './news-item.m.less';
 import pencil from './pencil.svg';
 import trash from './trash.svg';
 
-const NewsItem = ({image, imageType, date, theme,
-				entityId, editNewsItem, openModalConfirm}) => {
+const NewsItem = ({image, imageType, urlImage, theme,
+			date, entityId, editNewsItem, openModalConfirm}) => {
+				
+	const src = image ? `data:${imageType};base64, ${image}` : urlImage;
 
 	return (
 		<li key={entityId}
 				className={styles.newsItem}>
 			<div className={styles.boxNews}>
-				<img src={`data:${imageType};base64, ${image}`} alt="photo news"
+				<img src={src} alt="photo news"
 						className={styles.imageNews}/>
 				<p className={styles.dateNews}>
 					{date}

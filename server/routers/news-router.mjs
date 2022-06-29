@@ -49,7 +49,7 @@ router.put('/:id', busboy({immediate: true}), async (req, res, next) => {
 
 		novelNews.theme = theme;
 		novelNews.text = text;
-		novelNews.image = image.toString('base64');
+		novelNews.image = image ? image.toString('base64') : null;
 		novelNews.imageType = imageType;
 		novelNews.nameFileImage = nameFileImage;
 		novelNews.urlImage = urlImage;
@@ -108,15 +108,13 @@ router.post('/', busboy({immediate: true}), async (req, res, next) => {
 
 		newsData.theme = theme;
 		newsData.text = text;
-		newsData.image = image.toString('base64');
-		newsData.imageType = imageType;
-		newsData.nameFileImage = nameFileImage;
-		newsData.urlImage = urlImage;
+		newsData.image = image ? image.toString('base64') : null;
+		newsData.imageType = imageType || null;
+		newsData.nameFileImage = nameFileImage || null;
+		newsData.urlImage = urlImage || null;
 		newsData.date = date;
-		console.log(theme, 55);
 
 		let id = await newsRepository.save(newsData);
-		//const result = await newsRepository.fetch(id);
 		let result = await client.execute(['JSON.GET', `News:${id}`]);
 		result = { 
 			entityId: id,

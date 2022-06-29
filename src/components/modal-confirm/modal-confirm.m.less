@@ -13,17 +13,17 @@
 
 .modalNewsDialog {
 	position: absolute;
-	max-width: 1200px; //290px;
+	min-width: 445px; //290px;
 	left: 50%;
 	transform: translateX(-50%);
-	top: 40px;
+	top: 60px;
 	//margin: 40px auto;
 }
 
 .modalNewsContent {
 	position: relative;
 	box-sizing: border-box;
-	padding: 32px 54px 29px; //45px 28px 21px;
+	padding: 32px 54px 25px; //45px 28px 21px;
 	//padding-top: 45px;
 	width: 100%;
 	max-height:90vh;
@@ -35,9 +35,10 @@
 }
 
 .headingModal {
-	margin-bottom: 26px;
-	text-align: left;
-	font-size: 19px;
+	margin-bottom: 40px;
+	text-align: center;
+	font-size: 23px;
+	line-height: 29px;
 	color: rgba(0,0,0, 0.7);
 }
 
@@ -58,6 +59,7 @@
 
 .btnConfirm {
 	margin-left: auto;
+	padding: 0 22px;
 	padding-bottom: 1px;
 	background-color: #e45050;
 	&:hover {
@@ -70,6 +72,6 @@
 	padding: 0 15px;
 	background-color: rgba(116, 114, 114, 0.35);
 	&:hover {
-		background-color: rgba(104, 95, 95, 0.35);
+		background-color: rgba(104, 95, 95, 0.25);
 	}
 }

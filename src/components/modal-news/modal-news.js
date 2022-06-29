@@ -27,17 +27,17 @@ class ModalNews extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault();
 		const {postNewsData, newsDataRequested, newsDataPosted, newsDataError, 
-			theme, text, urlImage, imageFile, methodNews, entityId,
+			theme, text, urlImage, flagImageFile, methodNews, entityId,
 			putNewsData, putNewsRequested, putNewsSuccess, putNewsError} = this.props;
 
-		if (theme === '' || text === '' || (!urlImage && !imageFile)) {
+		if (theme === '' || text === '' || !urlImage && !flagImageFile) {
 			if (theme === '') {
 				this.changeStyleInvalidInput('[class^="inputThemeNews"]');
 			}
 			if (text === '') {
 				this.changeStyleInvalidInput('[class^="textareaNews"]');
 			}
-			if (!urlImage && !imageFile) {
+			if (!urlImage && !flagImageFile) {
 				this.changeStyleInvalidInput('[class^="inputLinkImage"]');
 				this.changeStyleInvalidInput('[class^="boxFileImage"]');
 			}
@@ -78,9 +78,9 @@ class ModalNews extends Component {
 		e.preventDefault();
 
 		if (e.target.files[0]) {
-			this.props.inputChanged('image', e.target.files[0]);
-			document.querySelector('[class^="inputLinkImage"]').style.outline='none';
-			document.querySelector('[class^="boxFileImage"]').style.outline='none';
+			//this.props.inputChanged('image', e.target.files[0]);
+			//document.querySelector('[class^="inputLinkImage"]').style.outline='none';
+			//document.querySelector('[class^="boxFileImage"]').style.outline='none';
 
 			const formData = new FormData();
 			formData.append('image', e.target.files[0]);
@@ -89,9 +89,8 @@ class ModalNews extends Component {
 			this.props.postNewsImage(formData)
 				.then(data => {
 					this.props.newsImagePosted(data);
-					// if (data.image !== null) {
-					// 	this.setState({nameFileImage: data.nameFileImage});
-					// }
+					document.querySelector('[class^="inputLinkImage"]').style.outline='none';
+					document.querySelector('[class^="boxFileImage"]').style.outline='none';
 				})
 				.catch(error => {this.props.newsImageError(error); console.log(error, '444ererer');});
 		}
@@ -134,9 +133,9 @@ const mapMethodsToProps = (adminAccountService) => ({
 });
 
 const mapStateToProps = ({flagOpenModalNews, headingModal, newsImage, newsData, 
-	theme, text, urlImage, nameFileImage, methodNews, entityId}) => ({
+	theme, text, urlImage, nameFileImage, methodNews, entityId, flagImageFile}) => ({
 	flagOpenModalNews, headingModal, newsImage, newsData,theme,
-	text, urlImage, nameFileImage, methodNews, entityId
+	text, urlImage, nameFileImage, methodNews, entityId, flagImageFile
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -45,7 +45,7 @@ const initialState = {
 	text: '',
 	urlImage: '',
 	nameFileImage: '',
-	imageFile: null,
+	flagImageFile: false,
 
 	IdNewsDeleted: null
 
@@ -88,10 +88,6 @@ const inputValueDefine = (action) => {
 		case 'url': 
 			return {
 				urlImage: action.payload
-			}
-		case 'image': 
-			return {
-				imageFile: action.payload
 			}
 		default: return {}
 	}
@@ -192,7 +188,7 @@ const reducer = (state = initialState, action) => {
 				text: '',
 				urlImage: '',
 				nameFileImage: '',
-				imageFile: null
+				flagImageFile: false
 			}
 
 		case 'OPEN_MODAL_EDIT_NEWS':
@@ -204,7 +200,8 @@ const reducer = (state = initialState, action) => {
 				theme: action.payload.theme || '',
 				text: action.payload.text || '',
 				urlImage: action.payload.urlImage || '',
-				nameFileImage: action.payload.nameFileImage || null
+				nameFileImage: action.payload.nameFileImage || null,
+				flagImageFile: false
 			}
 
 		case 'FETCH_NEWS_LIST_REQUEST':
@@ -244,7 +241,8 @@ const reducer = (state = initialState, action) => {
 				...state,
 				newsImage: null,
 				newsImageSending: true,
-				newsImageError: false
+				newsImageError: false,
+				flagImageFile: false
 			}
 
 		case 'POST_NEWS_IMAGE_SUCCESS':
@@ -253,7 +251,8 @@ const reducer = (state = initialState, action) => {
 				newsImage: action.payload,
 				newsImageSending: false,
 				newsImageError: false,
-				nameFileImage: action.payload.nameFileImage
+				nameFileImage: action.payload.nameFileImage,
+				flagImageFile: true
 			}
 
 		case 'POST_NEWS_IMAGE_FAILURE':
@@ -261,7 +260,8 @@ const reducer = (state = initialState, action) => {
 				...state,
 				newsImage: null,
 				newsImageSending: false,
-				newsImageError: action.payload
+				newsImageError: action.payload,
+				flagImageFile: false
 			}
 
 		case 'POST_NEWS_DATA_REQUEST':
