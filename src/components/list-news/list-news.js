@@ -49,7 +49,7 @@ class ListNews extends Component {
 				<Spinner />
 			</div> )} 
 
-		if (newsListError) { return <ErrorIndicator />}
+		if (newsListError) { return <ErrorIndicator /> }
 
 		return (
 			<div className={styles.containerNews}>

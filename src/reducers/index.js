@@ -47,7 +47,23 @@ const initialState = {
 	nameFileImage: '',
 	flagImageFile: false,
 
-	IdNewsDeleted: null
+	IdNewsDeleted: null,
+
+	//directories
+	flagOpenDirectories: true,
+
+	directoriesList: null,
+	directoriesLoading: false,
+	directoriesError: false,
+	visibleDirectories: null,
+
+	labelSearchDirect: null,
+	listTitleDirect: null,
+	typeDirect: null,
+	visibleListTitle: null,
+
+	searchTitle: '',
+	additTitle: ''
 
 };
 
@@ -60,34 +76,44 @@ const openBlock = (state, action) => {
 			}
 		case 'newsEditing':
 			return {
-				flagOpenNews: !state.flagOpenNews,
+				flagOpenNews: !state.flagOpenNews
+			}
+
+		case 'directories':
+			return {
+				flagOpenDirectories: !state.flagOpenDirectories
 			}
 		
 		default: return {}
 	}
 };
 
-const inputValueDefine = (action) => {
-	switch (action.fieldName) {
+const inputValueDefine = (state, {fieldName, payload}) => {
+	switch (fieldName) {
 		case 'fio':
 			return {
-				fio: action.payload
+				fio: payload
 			}
 		case 'email':
 			return {
-				email: action.payload
+				email: payload
 			}
 		case 'theme': 
 			return {
-				theme: action.payload
+				theme: payload
 			}
 		case 'text': 
 			return {
-				text: action.payload
+				text: payload
 			}
 		case 'url': 
 			return {
-				urlImage: action.payload
+				urlImage: payload
+			}
+		case 'searchTitle': 
+			return {
+				searchTitle: payload,
+				visibleListTitle:	defineVisibleListTitle(searchTitles(state.listTitleDirect, payload), 5)
 			}
 		default: return {}
 	}
@@ -101,6 +127,20 @@ const defineVisibleNews = (state) => {
 			return state.newsList.slice(0, 3)
 	}
 };
+
+function defineVisibleListTitle(listTitle, quantity) {
+	return listTitle.sort((a, b) => b.id - a.id).slice(0, quantity);
+}
+
+function searchTitles(listTitles, term) {
+	if (term === '') {
+		return listTitles;
+	}
+
+	return listTitles.map(item => item)
+							.filter(({title}) => title.toLowerCase()
+																.indexOf(term.toLowerCase()) > -1);
+}
 
 
 const reducer = (state = initialState, action) => {
@@ -173,7 +213,7 @@ const reducer = (state = initialState, action) => {
 		case 'INPUT_CHANGED':
 			return {
 				...state,
-				...inputValueDefine(action) 
+				...inputValueDefine(state, action) 
 			}
 
 
@@ -298,50 +338,99 @@ const reducer = (state = initialState, action) => {
 				newsPutError: false,
 			}
 	
-			case 'PUT_NEWS_SUCCESS':
-				return {
-					...state,
-					newsList: action.payload,
-					visibleNewsList: action.payload.slice(0, 3),
-					newsPutInit: false,
-					newsPutError: false
-				}
-	
-			case 'PUT_NEWS_FAILURE':
-				return {
-					...state,
-					newsPutInit: false,
-					newsPutError: action.payload
-				}
+		case 'PUT_NEWS_SUCCESS':
+			return {
+				...state,
+				newsList: action.payload,
+				visibleNewsList: action.payload.slice(0, 3),
+				newsPutInit: false,
+				newsPutError: false
+			}
 
-			case 'DELETE_NEWS_REQUEST':
-				return {
-					...state,
-					newsDeleteInit: true,
-					newsDeleteError: false,
-				}
+		case 'PUT_NEWS_FAILURE':
+			return {
+				...state,
+				newsPutInit: false,
+				newsPutError: action.payload
+			}
 
-			case 'DELETE_NEWS_SUCCESS':
-				return {
-					...state,
-					newsList: action.payload,
-					visibleNewsList: action.payload.slice(0, 3),
-					newsDeleteInit: false,
-					newsDeleteError: false
-				}
+		case 'DELETE_NEWS_REQUEST':
+			return {
+				...state,
+				newsDeleteInit: true,
+				newsDeleteError: false,
+			}
 
-			case 'DELETE_NEWS_FAILURE':
-				return {
-					...state,
-					newsDeleteInit: false,
-					newsDeleteError: action.payload
-				}
+		case 'DELETE_NEWS_SUCCESS':
+			return {
+				...state,
+				newsList: action.payload,
+				visibleNewsList: action.payload.slice(0, 3),
+				newsDeleteInit: false,
+				newsDeleteError: false
+			}
 
-			case 'ADD_ID_NEWS_DELETED':
-				return {
-					...state,
-					IdNewsDeleted: action.payload
-				}
+		case 'DELETE_NEWS_FAILURE':
+			return {
+				...state,
+				newsDeleteInit: false,
+				newsDeleteError: action.payload
+			}
+
+		case 'ADD_ID_NEWS_DELETED':
+			return {
+				...state,
+				IdNewsDeleted: action.payload
+			}
+
+
+		// directories
+		case 'FETCH_DIRECTORIES_REQUEST':
+			return {
+				...state,
+				directoriesList: null,
+				directoriesLoading: true,
+				directoriesError: false,
+				visibleDirectories: null
+			}
+
+		case 'FETCH_DIRECTORIES_SUCCESS':
+			return {
+				...state,
+				directoriesList: action.payload,
+				directoriesLoading: false,
+				directoriesError: false,
+				//visibleDirectories: action.paylaod.slice(0, 3)
+			}
+
+		case 'FETCH_DIRECTORIES_FAILURE':
+			return {
+				...state,
+				directoriesList: null,
+				directoriesLoading: false,
+				directoriesError: action.payload,
+				visibleDirectories: null
+			}
+
+		case 'OPEN_MODAL_DIRECTORIES':
+			const listTitleDirect = action.payload.list
+												.map((title, id) => ({id: ++id, title})); //array with objs consists of id and title
+
+			return {
+				...state,
+				labelSearchDirect: action.payload.label,
+				additTitle: '',
+				listTitleDirect,
+				typeDirect: action.payload.type,
+				visibleListTitle: defineVisibleListTitle(listTitleDirect, 5)
+				//listTitleDirect.sort((a, b) => b.id - a.id).slice(0, 5)
+			}
+
+		case 'ADDIT_INPUT_CHANGED':
+			return {
+				...state,
+				additTitle: action.payload
+			}
 
 		default: 
 			return state;

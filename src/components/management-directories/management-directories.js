@@ -1,21 +1,32 @@
-import React, {Component} from 'react';
+import React from 'react';
+import {connect} from 'react-redux';
+import { openBlock } from '../../actions';
 
+import ListDirectories from '../list-directories';
 import styles from './management-directories.m.less';
 
-class ManagementDirectories extends Component {
+const ManagementDirectories = ({flagOpenDirectories, openBlock}) => {
+	const contentDirectories = flagOpenDirectories ? <ListDirectories /> : null;
 
-	render() {
+	return (
+		<li>
+			<button className={styles.buttonDirectories}
+						onClick={openBlock}>
+				<h2 className={styles.headerDirectories}>
+					Управление справочниками
+				</h2>
+			</button>
+			{contentDirectories}
+		</li>
+	);
+};
 
-		return (
-			<li>
-				<button className={styles.buttonDirectories}>
-					<h2 className={styles.headerDirectories}>
-						Управление справочниками
-					</h2>
-				</button>
-			</li>
-		);
-	}
-}
+const mapStateToProps = ({flagOpenDirectories}) => ({
+	flagOpenDirectories
+});
 
-export default ManagementDirectories;
+const mapDispatchToProps = (dispatch) => ({
+	openBlock: () => dispatch(openBlock('directories'))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManagementDirectories);

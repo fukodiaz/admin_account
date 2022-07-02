@@ -13,13 +13,13 @@ export default class AdminAccountService {
 		return res.json();
 	}; 
 
-	// getListOffers = async () => {
-	// 	const res = await this.getResource(`/offers`);
-	// 	return res;
-	// };
-
 	getNewsList = async () => {
 		const res = await this.getResource(`/newsData`);
+		return res;
+	};
+
+	getDataDirectories = async () => {
+		const res = await this.getResource(`/directories`);
 		return res;
 	};
 
@@ -74,6 +74,20 @@ export default class AdminAccountService {
 			method: 'PUT',
 			headers: {
 				'Access-Control-Allow-Origin': '*',
+			},
+			body: data
+		});
+	
+		return res.json();
+	};
+
+	putTitleDirectory = async (id, data) => {
+		const res = await fetch(`${this._apiBase}/directories/${id}`, {
+			mode: 'cors',
+			method: 'PUT',
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Content-type': 'application/json',
 			},
 			body: data
 		});

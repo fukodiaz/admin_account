@@ -1,31 +1,26 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import { openBlock } from '../../actions';
 
-//import ContainerNews from '../container-news';
 import ListNews from '../list-news';
 
 import styles from './news-editing.m.less';
 
-class NewsEditing extends Component {
+const NewsEditing = ({flagOpenNews, openBlock}) => {
+	const contentNews = flagOpenNews ? <ListNews /> : null;
 
-	render() {
-		const {flagOpenNews, openBlock} = this.props;
-		let contentNews = flagOpenNews ? <ListNews /> : null;
-
-		return (
-			<li>
-				<button className={styles.buttonNewsEditing}
-							onClick={openBlock}>
-					<h2 className={styles.headerNewsEditing}>
-						Редактирование новостей
-					</h2>
-				</button>
-				{contentNews}
-			</li>
-		);
-	}
-}
+	return (
+		<li>
+			<button className={styles.buttonNewsEditing}
+						onClick={openBlock}>
+				<h2 className={styles.headerNewsEditing}>
+					Редактирование новостей
+				</h2>
+			</button>
+			{contentNews}
+		</li>
+	);
+};
 
 const mapStateToProps = ({flagOpenNews}) => ({
 	flagOpenNews

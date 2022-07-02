@@ -138,6 +138,37 @@ const addIdNewsDeleted = (payload) => ({
 	payload
 });
 
+// directories
+
+const directoriesRequested = () => ({type: 'FETCH_DIRECTORIES_REQUEST'});
+
+const directoriesLoaded = (payload) => ({
+		type: 'FETCH_DIRECTORIES_SUCCESS',
+		payload
+});
+
+const directoriesError = (payload) => ({
+	type: 'FETCH_DIRECTORIES_FAILURE',
+	payload
+});
+
+const fetchDirectories = (methodService, dispatch) => () => {
+	dispatch(directoriesRequested());
+	methodService()
+		.then(data => dispatch(directoriesLoaded(data)))
+		.catch(error => dispatch(directoriesError(error)));
+};
+
+const openModalDirectories = (payload) => ({
+	type: 'OPEN_MODAL_DIRECTORIES',
+	payload
+});
+
+const additInputChanged = (payload) => ({
+	type: 'ADDIT_INPUT_CHANGED',
+	payload
+});
+
 export {
 	fetchOffers,
 	editingPersonalData,
@@ -168,5 +199,8 @@ export {
 	newsDeleteRequested,
 	newsDeleted,
 	newsDeleteError,
-	addIdNewsDeleted
+	addIdNewsDeleted,
+	fetchDirectories,
+	openModalDirectories,
+	additInputChanged
 };
