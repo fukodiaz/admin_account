@@ -21,7 +21,7 @@ class ListDirectories extends Component {
 		return (
 			<li key={entityId}>
 				<DirectoriesItem {...data} idx={idx}
-						openModalDirectories={() => openModalDirectories({label, list, type})} />
+					openModalDirectories={() => openModalDirectories({label, list, type, entityId})} />
 			</li>
 		);
 	}

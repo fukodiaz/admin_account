@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { hideModal } from '../../utils';
+import { hideModal, changeStyleValidInput } from '../../utils';
 import styles from './form-news.m.less';
 import download from './download.svg';
 
@@ -8,12 +8,6 @@ const FormNews = (props) => {
 	const {onChangeImage, nameFileImage,
 			handleSubmit, inputChanged,
 			theme, text, urlImage} = props;
-
-	const changeStyleValidInput = (e) => {
-		if (e.target.value !== '') {
-			e.currentTarget.style.outline='none';
-		}
-	}
 
 	const inputChangedTheme = (e) => {
 		inputChanged('theme', e.target.value);

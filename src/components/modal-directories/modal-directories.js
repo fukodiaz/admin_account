@@ -2,8 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import {compose, withAdminAccountService} from '../hoc';
-import { openModalDirectories, inputChanged, additInputChanged } from '../../actions';
-import {onClickModalBox, hideModal, addZerosToNum} from '../../utils';
+import { openModalDirectories, inputChanged, 
+			additInputChanged, putTitleRequested, 
+			putTitleSuccess, putTitleError} from '../../actions';
+import {onClickModalBox, hideModal, addZerosToNum, 
+			changeStyleInvalidInput, changeStyleValidInput} from '../../utils';
 
 import FormDirectories from '../form-directories';
 import styles from './modal-directories.m.less';
@@ -48,17 +51,43 @@ class ModalDirectories extends Component {
 			<li key={id} className={styles.itemInput}>
 				<input type='text' name={`title${id}`} 
 						id={id} value={title} readOnly={read}
-						onChange={(e) => onChange(e.target.value)}
+						onChange={onChange}
 						className={styles.inputTitle} />
 			</li>
 		);
 	}
 
 	createAdditInput = ({id}, idx, arr) => {
-		const {additTitle, onChange} = this.props;
+		const {additTitle} = this.props;
 		if (idx === 0) {
-			return this.createInput({['id']: ++id, title: additTitle}, idx, arr, false, onChange);
+			return this.createInput({['id']: ++id, title: additTitle}, idx, arr, false, this.onChangeAdditInput);
 		}
+	}
+
+	onChangeAdditInput = (e) => {
+		this.props.onChange(e.target.value);
+		changeStyleValidInput(e);
+	}
+
+	handleSubmit = (e) => {
+		const {putTitleDirectory, putTitleRequested, putTitleSuccess, 
+				putTitleError, additTitle, visibleList, entityId} = this.props;
+		e.preventDefault();
+
+		const idAdditInput = ++visibleList[0]['id'];
+		if (additTitle === '') {
+			changeStyleInvalidInput(`input[name='title${idAdditInput}']`);
+			return null;
+		}
+
+		const formData = new FormData();
+		formData.append('title', additTitle);
+		const json = JSON.stringify(Object.fromEntries(formData.entries(formData)));
+		
+		putTitleRequested();
+		putTitleDirectory(entityId, json)
+			.then((data) => {putTitleSuccess(data); console.log(data, '22putTitle');})
+			.catch((error) => {putTitleError(error); console.log(error, '444putTitle');});
 	}
 
 	render() {
@@ -78,7 +107,8 @@ class ModalDirectories extends Component {
 						<FormDirectories labelSearch={labelSearch} list={list} type={type}
 									contentLabels={contentLabels} contentInputs={contentInputs}
 									additLabel={additLabel} additInput={additInput} 
-									inputChanged={inputChanged} searchTitle={searchTitle} />
+									inputChanged={inputChanged} searchTitle={searchTitle}
+									handleSubmit={this.handleSubmit} />
 					</div>
 				</div>
 			</div>
@@ -91,17 +121,22 @@ const mapMethodsToProps = (adminAccountService) => ({
 });
 
 const mapStateToProps = ({labelSearchDirect,listTitleDirect,typeDirect,
-									visibleListTitle, searchTitle, additTitle}) => ({
+									visibleListTitle, searchTitle, additTitle, entityIdDirect}) => ({
 	labelSearch: labelSearchDirect,
 	list: listTitleDirect,
 	type: typeDirect,
 	visibleList: visibleListTitle,
-	searchTitle, additTitle
+	searchTitle, additTitle,
+	entityId: entityIdDirect
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	inputChanged: (fieldName, value) => dispatch(inputChanged(fieldName, value)),
-	onChange: (value) => dispatch(additInputChanged(value))
+	onChange: (data) => dispatch(additInputChanged(data)),
+	addIdAdditInput: (id) => dispatch(addIdAdditInput(id)),
+	putTitleRequested: () => dispatch(putTitleRequested()),
+	putTitleSuccess: (data) => dispatch(putTitleSuccess(data)),
+	putTitleError: (error) => dispatch(putTitleError(error))
 });
 
 export default compose(

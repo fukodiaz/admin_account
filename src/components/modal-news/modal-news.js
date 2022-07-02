@@ -8,7 +8,7 @@ import {newsImageRequested, newsImagePosted,
 			putNewsRequested, putNewsSuccess, putNewsError} from '../../actions';
 
 import FormNews from '../form-news';
-import {onClickModalBox, hideModal} from '../../utils';
+import {onClickModalBox, hideModal, changeStyleInvalidInput} from '../../utils';
 import styles from './modal-news.m.less';
 
 class ModalNews extends Component {
@@ -19,11 +19,6 @@ class ModalNews extends Component {
 		}
 	}
 
-	changeStyleInvalidInput = (selector) => {
-		document.querySelector(selector).style.outline='3px solid rgba(226, 79, 79, 0.8)';
-		document.querySelector(selector).style.outlineOffset='-2px';
-	}
-
 	handleSubmit = (e) => {
 		e.preventDefault();
 		const {postNewsData, newsDataRequested, newsDataPosted, newsDataError, 
@@ -32,14 +27,14 @@ class ModalNews extends Component {
 
 		if (theme === '' || text === '' || !urlImage && !flagImageFile) {
 			if (theme === '') {
-				this.changeStyleInvalidInput('[class^="inputThemeNews"]');
+				changeStyleInvalidInput('[class^="inputThemeNews"]');
 			}
 			if (text === '') {
-				this.changeStyleInvalidInput('[class^="textareaNews"]');
+				changeStyleInvalidInput('[class^="textareaNews"]');
 			}
 			if (!urlImage && !flagImageFile) {
-				this.changeStyleInvalidInput('[class^="inputLinkImage"]');
-				this.changeStyleInvalidInput('[class^="boxFileImage"]');
+				changeStyleInvalidInput('[class^="inputLinkImage"]');
+				changeStyleInvalidInput('[class^="boxFileImage"]');
 			}
 			return null;}
 
@@ -52,7 +47,7 @@ class ModalNews extends Component {
 						putNewsSuccess(data);
 						console.log(data, '222put');
 					})
-					.catch(error => {putNewsError(error); console.log(error, '444erput');})
+					.catch(error => putNewsError(error))
 					.finally(() => {
 						e.target.reset();
 						hideModal('[class^="modalBox"]');
@@ -66,7 +61,7 @@ class ModalNews extends Component {
 						newsDataPosted(data); 
 						console.log(data, '222ggg');
 					})
-					.catch(error => {newsDataError(error); console.log(error, '444ererer');})
+					.catch(error => newsDataError(error))
 					.finally(() => {
 						e.target.reset();
 						hideModal('[class^="modalBox"]');
@@ -78,10 +73,6 @@ class ModalNews extends Component {
 		e.preventDefault();
 
 		if (e.target.files[0]) {
-			//this.props.inputChanged('image', e.target.files[0]);
-			//document.querySelector('[class^="inputLinkImage"]').style.outline='none';
-			//document.querySelector('[class^="boxFileImage"]').style.outline='none';
-
 			const formData = new FormData();
 			formData.append('image', e.target.files[0]);
 			this.props.newsImageRequested();
@@ -92,7 +83,7 @@ class ModalNews extends Component {
 					document.querySelector('[class^="inputLinkImage"]').style.outline='none';
 					document.querySelector('[class^="boxFileImage"]').style.outline='none';
 				})
-				.catch(error => {this.props.newsImageError(error); console.log(error, '444ererer');});
+				.catch(error => this.props.newsImageError(error));
 		}
 	}
 
@@ -103,7 +94,6 @@ class ModalNews extends Component {
 	componentWillUnmount() {
 		document.removeEventListener('keydown', this.handleKeyDown);
 	}
-
 
 	render() {
 		const {headingModal, inputChanged,theme, 

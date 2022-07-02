@@ -60,10 +60,14 @@ const initialState = {
 	labelSearchDirect: null,
 	listTitleDirect: null,
 	typeDirect: null,
+	entityIdDirect: null,
 	visibleListTitle: null,
 
 	searchTitle: '',
-	additTitle: ''
+	additTitle: '',
+
+	titlePutInit: false,
+	titlePutError: false,
 
 };
 
@@ -422,6 +426,7 @@ const reducer = (state = initialState, action) => {
 				additTitle: '',
 				listTitleDirect,
 				typeDirect: action.payload.type,
+				entityIdDirect: action.payload.entityId,
 				visibleListTitle: defineVisibleListTitle(listTitleDirect, 5)
 				//listTitleDirect.sort((a, b) => b.id - a.id).slice(0, 5)
 			}
@@ -430,6 +435,31 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				additTitle: action.payload
+			}
+
+		case 'PUT_TITLE_REQUEST':
+			return {
+				...state,
+				titlePutInit: true,
+				titlePutError: false,
+			}
+
+		case 'PUT_TITLE_SUCCESS':
+			const listTitles = action.payload.map((title, id) => ({id: ++id, title}));
+			return {
+				...state,
+				titlePutInit: false,
+				titlePutError: false,
+				listTitleDirect: listTitles,
+				visibleListTitle: defineVisibleListTitle(listTitles, 5),
+				additTitle: ''
+			}
+
+		case 'PUT_TITLE_FAILURE':
+			return {
+				...state,
+				titlePutInit: false,
+				titlePutError: action.payload
 			}
 
 		default: 

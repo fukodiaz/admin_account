@@ -4,11 +4,17 @@ import {
 	onClickModalBox
 } from './modal-functions';
 
-import { addZerosToNum } from './general';
+import { 
+	addZerosToNum,
+	changeStyleInvalidInput,
+	changeStyleValidInput
+} from './general';
 
 export {
 	openModal,
 	hideModal,
 	onClickModalBox,
-	addZerosToNum
+	addZerosToNum,
+	changeStyleInvalidInput,
+	changeStyleValidInput
 };

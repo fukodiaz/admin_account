@@ -169,6 +169,18 @@ const additInputChanged = (payload) => ({
 	payload
 });
 
+const putTitleRequested = () => ({type: 'PUT_TITLE_REQUEST'});
+
+const putTitleSuccess = (payload) => ({
+	type: 'PUT_TITLE_SUCCESS',
+	payload
+}); 
+
+const putTitleError = (payload) => ({
+	type: 'PUT_TITLE_FAILURE',
+	payload
+});
+
 export {
 	fetchOffers,
 	editingPersonalData,
@@ -202,5 +214,8 @@ export {
 	addIdNewsDeleted,
 	fetchDirectories,
 	openModalDirectories,
-	additInputChanged
+	additInputChanged,
+	putTitleRequested,
+	putTitleSuccess,
+	putTitleError
 };

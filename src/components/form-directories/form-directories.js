@@ -5,7 +5,7 @@ import styles from './form-directories.m.less';
 const FormDirectories = (props) => {
 	const {labelSearch, list, type, contentLabels,
 			contentInputs, additLabel, additInput,
-			inputChanged, searchTitle} = props; 
+			inputChanged, searchTitle, handleSubmit} = props; 
 
 	const btnSubmitTitle = type === 'extendable' ? 
 			<button type="submit" className={styles.btnSubmitTitle}>
@@ -14,7 +14,7 @@ const FormDirectories = (props) => {
 	return (
 		<div className={styles.boxFormDirect}>
 			<form className={styles.formDirect}
-					onSubmit={() => {}}>
+					onSubmit={handleSubmit}>
 				<div className={styles.boxSearch}>
 					<label htmlFor="searchTitle" className={styles.labelSearchTitle}>
 						{labelSearch}

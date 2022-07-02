@@ -11,8 +11,21 @@ const addZerosToNum = (num, start) => {
 			break;
 		}
 	}
-}
+};
+
+const changeStyleInvalidInput = (selector) => {
+	document.querySelector(selector).style.outline='3px solid rgba(226, 79, 79, 0.8)';
+	document.querySelector(selector).style.outlineOffset='-2px';
+};
+
+const changeStyleValidInput = (e) => {
+	if (e.target.value !== '') {
+		e.currentTarget.style.outline='none';
+	}
+};
 
 export {
-	addZerosToNum
+	addZerosToNum,
+	changeStyleInvalidInput,
+	changeStyleValidInput
 };
