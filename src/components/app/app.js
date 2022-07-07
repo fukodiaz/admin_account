@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PersonalData from '../personal-data';
 import NewsEditing from '../news-editing';
 import ManagementDirectories from '../management-directories';
-import ManagementUsers from '../management-users';
+import UsersManagement from '../users-management';
 import StructureOrganizational from '../structure-organizational';
 import ModalNews from '../modal-news';
 
@@ -21,7 +21,7 @@ export default class App extends Component {
 					<PersonalData />
 					<NewsEditing />
 					<ManagementDirectories />
-					<ManagementUsers />
+					<UsersManagement />
 					<StructureOrganizational />
 				</ul>
 				<ModalNews />

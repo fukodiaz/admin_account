@@ -16,7 +16,7 @@ const initialState = {
 	email: '',
 
 
-	flagOpenModalNews: false,
+	//flagOpenModalNews: false,
 	headingModal: null,
 	methodNews: null,
 	entityId: null,
@@ -25,7 +25,7 @@ const initialState = {
 	newsListLoading: false,
 	newsListError: false,
 	visibleNewsList: null,
-	flagAllNews: true,
+	flagAllNews: false,
 
 	newsImage: null,
 	newsImageSending: false,
@@ -56,6 +56,7 @@ const initialState = {
 	directoriesLoading: false,
 	directoriesError: false,
 	visibleDirectories: null,
+	flagAllDirectories: false,
 
 	labelSearchDirect: null,
 	listTitleDirect: null,
@@ -69,6 +70,18 @@ const initialState = {
 	titlePutInit: false,
 	titlePutError: false,
 
+	//Users
+	flagShowUsers: true,
+
+	listOffices: null,
+	isActiveOffice: "educational",
+
+	usersList: null,
+	usersListLoading: false,
+	usersListError: false,
+
+	headingModalUser: null,
+	methodUser: null
 };
 
 const openBlock = (state, action) => {
@@ -86,6 +99,12 @@ const openBlock = (state, action) => {
 		case 'directories':
 			return {
 				flagOpenDirectories: !state.flagOpenDirectories
+			}
+
+		case 'users': 
+			return {
+				flagShowUsers: !state.flagShowUsers,
+				isActiveOffice: "educational"
 			}
 		
 		default: return {}
@@ -123,12 +142,21 @@ const inputValueDefine = (state, {fieldName, payload}) => {
 	}
 };
 
-const defineVisibleNews = (state) => {
-	switch (state.flagAllNews) {
+// const defineVisibleNews = (state) => {
+// 	switch (state.flagAllNews) {
+// 		case true:
+// 			return state.newsList
+// 		case false:
+// 			return state.newsList.slice(0, 3)
+// 	}
+// };
+
+const defineVisibleItems = (flagAllItems, itemsList, quantity) => {
+	switch (flagAllItems) {
 		case true:
-			return state.newsList
+			return itemsList
 		case false:
-			return state.newsList.slice(0, 3)
+			return itemsList.slice(0, quantity)
 	}
 };
 
@@ -225,7 +253,7 @@ const reducer = (state = initialState, action) => {
 		case 'OPEN_MODAL_CREATION_NEWS':
 			return {
 				...state,
-				flagOpenModalNews: !state.flagOpenModalNews,
+				//flagOpenModalNews: !state.flagOpenModalNews,
 				headingModal: 'Создать новость',
 				methodNews: 'POST',
 				theme: '',
@@ -236,15 +264,16 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case 'OPEN_MODAL_EDIT_NEWS':
+			const {theme, text, urlImage, nameFileImage} = action.payload;
 			return {
 				...state,
 				headingModal: 'Редактировать новость',
 				methodNews: 'PUT',
 				entityId: action.payload.entityId,
-				theme: action.payload.theme || '',
-				text: action.payload.text || '',
-				urlImage: action.payload.urlImage || '',
-				nameFileImage: action.payload.nameFileImage || null,
+				theme: theme || '',
+				text: text || '',
+				urlImage: urlImage || '',
+				nameFileImage: nameFileImage || null,
 				flagImageFile: false
 			}
 
@@ -257,12 +286,15 @@ const reducer = (state = initialState, action) => {
 			}
 			
 		case 'FETCH_NEWS_LIST_SUCCESS':
+			const {flagAllNews} = state;
 			return {
 				...state,
 				newsList: action.payload,
 				newsListLoading: false,
 				newsListError: false,
-				visibleNewsList: action.payload.slice(0, 3)
+				visibleNewsList: defineVisibleItems(flagAllNews, action.payload, 3),
+				flagAllNews: !state.flagAllNews
+				//visibleNewsList: action.payload.slice(0, 3)
 			}
 
 		case 'FETCH_NEWS_LIST_FAILURE':
@@ -274,10 +306,11 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case 'SHOW_ALL_NEWS':
+			const {newsList} = state;
 			return {
 				...state,
 				flagAllNews: !state.flagAllNews,
-				visibleNewsList: defineVisibleNews(state)
+				visibleNewsList: defineVisibleItems(state.flagAllNews, newsList, 3) //defineVisibleNews(state)
 			}
 
 		case 'POST_NEWS_IMAGE_REQUEST':
@@ -399,12 +432,18 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case 'FETCH_DIRECTORIES_SUCCESS':
+			const {flagAllDirectories} = state;
+			const listOffices = action.payload.filter(({entityId}) => entityId === "Offices")
+																.map(({list}) => list)[0];
+
 			return {
 				...state,
 				directoriesList: action.payload,
 				directoriesLoading: false,
 				directoriesError: false,
-				//visibleDirectories: action.paylaod.slice(0, 3)
+				visibleDirectories: defineVisibleItems(flagAllDirectories, action.payload, 2),
+				flagAllDirectories: !flagAllDirectories,
+				listOffices
 			}
 
 		case 'FETCH_DIRECTORIES_FAILURE':
@@ -416,18 +455,32 @@ const reducer = (state = initialState, action) => {
 				visibleDirectories: null
 			}
 
+		case 'SHOW_ALL_DIRECTORIES': {
+			const {flagAllDirectories, directoriesList} = state;
+			return {
+				...state,
+				flagAllDirectories: !flagAllDirectories,
+				visibleDirectories: defineVisibleItems(flagAllDirectories, directoriesList, 2)
+			}
+		}
+
 		case 'OPEN_MODAL_DIRECTORIES':
-			const listTitleDirect = action.payload.list
-												.map((title, id) => ({id: ++id, title})); //array with objs consists of id and title
+			const {list, label, type, entityId} = action.payload;
+			const listTitleDirect = list
+												.map((title, id) => {
+													if (entityId === 'Offices') {
+														return {id: ++id, 'title': title.title}
+													}
+													return {id: ++id, title}}); //array with objs consists of id and title
 
 			return {
 				...state,
-				labelSearchDirect: action.payload.label,
+				labelSearchDirect: label,
 				additTitle: '',
 				listTitleDirect,
-				typeDirect: action.payload.type,
-				entityIdDirect: action.payload.entityId,
-				visibleListTitle: defineVisibleListTitle(listTitleDirect, 5)
+				typeDirect: type,
+				entityIdDirect: entityId,
+				visibleListTitle: defineVisibleListTitle(listTitleDirect, 5) 
 				//listTitleDirect.sort((a, b) => b.id - a.id).slice(0, 5)
 			}
 
@@ -460,6 +513,45 @@ const reducer = (state = initialState, action) => {
 				...state,
 				titlePutInit: false,
 				titlePutError: action.payload
+			}
+
+		//Users
+
+		case 'FILTER_OFFICES':
+			return {
+				...state,
+				isActiveOffice: action.payload
+			}
+
+		case 'FETCH_USERS_DATA_REQUEST': 
+			return {
+				...state,
+				usersList: null,
+				usersListLoading: true,
+				usersListError: false
+			}
+
+		case 'FETCH_USERS_DATA_SUCCESS':
+			return {
+				...state,
+				usersList: action.payload,
+				usersListLoading: false,
+				usersListError: false
+			}
+
+		case 'FETCH_USERS_DATA_FAILURE':
+			return {
+				...state,
+				usersList: null,
+				usersListLoading: false,
+				usersListError: action.payload
+			}
+
+		case 'OPEN_MODAL_NEW_USER':
+			return {
+				...state,
+				headingModalUser: 'headingNewUser',
+				methodUser: null
 			}
 
 		default: 

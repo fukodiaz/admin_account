@@ -122,10 +122,10 @@ const mapMethodsToProps = (adminAccountService) => ({
 	putNewsData: adminAccountService.putNewsData
 });
 
-const mapStateToProps = ({flagOpenModalNews, headingModal, newsImage, newsData, 
+const mapStateToProps = ({headingModal, newsImage, newsData, 
 	theme, text, urlImage, nameFileImage, methodNews, entityId, flagImageFile}) => ({
-	flagOpenModalNews, headingModal, newsImage, newsData,theme,
-	text, urlImage, nameFileImage, methodNews, entityId, flagImageFile
+	headingModal, newsImage, newsData,theme, text, urlImage,
+	nameFileImage, methodNews, entityId, flagImageFile
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -159,6 +159,8 @@ const fetchDirectories = (methodService, dispatch) => () => {
 		.catch(error => dispatch(directoriesError(error)));
 };
 
+const showAllDirectories = () => ({type: 'SHOW_ALL_DIRECTORIES'});
+
 const openModalDirectories = (payload) => ({
 	type: 'OPEN_MODAL_DIRECTORIES',
 	payload
@@ -180,6 +182,35 @@ const putTitleError = (payload) => ({
 	type: 'PUT_TITLE_FAILURE',
 	payload
 });
+
+
+//Users
+
+const filterOffices = (payload) => ({
+	type: 'FILTER_OFFICES',
+	payload
+});
+
+const usersDataRequested = () => ({type: 'FETCH_USERS_DATA_REQUEST'});
+
+const usersDataLoaded = (payload) => ({
+		type: 'FETCH_USERS_DATA_SUCCESS',
+		payload
+});
+
+const usersDataError = (payload) => ({
+	type: 'FETCH_USERS_DATA_FAILURE',
+	payload
+});
+
+const fetchUsersData = (methodService, dispatch) => () => {
+	dispatch(usersDataRequested());
+	methodService()
+		.then(data => dispatch(usersDataLoaded(data)))
+		.catch(error => dispatch(usersDataError(error)));
+};
+
+const openModalNewUser = () => ({type: 'OPEN_MODAL_NEW_USER'});
 
 export {
 	fetchOffers,
@@ -213,9 +244,13 @@ export {
 	newsDeleteError,
 	addIdNewsDeleted,
 	fetchDirectories,
+	showAllDirectories,
 	openModalDirectories,
 	additInputChanged,
 	putTitleRequested,
 	putTitleSuccess,
-	putTitleError
+	putTitleError,
+	filterOffices,
+	fetchUsersData,
+	openModalNewUser
 };

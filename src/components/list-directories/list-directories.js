@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import {compose, withAdminAccountService} from '../hoc';
-import { fetchDirectories, openModalDirectories } from '../../actions';
+import { fetchDirectories, openModalDirectories, showAllDirectories } from '../../actions';
 
 import DirectoriesItem from '../directories-item';
 import Spinner from '../spinner';
@@ -27,8 +27,8 @@ class ListDirectories extends Component {
 	}
 
 	render() {
-		const {directoriesList, directoriesLoading, directoriesError} = this.props;
-		const contentDirectoriesList = directoriesList ? directoriesList.map(this.createDirectory) : null;
+		const {visibleDirectories, directoriesLoading, directoriesError, showAllDirectories} = this.props;
+		const contentDirectoriesList = visibleDirectories ? visibleDirectories.map(this.createDirectory) : null;
 
 		if (directoriesLoading) { 
 			return( 
@@ -44,7 +44,7 @@ class ListDirectories extends Component {
 					{contentDirectoriesList}
 				</ul>
 				<button type="button" className={styles.btnShowAllDirect}
-								onClick={() => {}}>
+								onClick={showAllDirectories}>
 					Показать все справочники
 				</button>
 			</div>
@@ -58,11 +58,13 @@ const mapMethodsToProps = (adminAccountService) => ({
 
 const mapStateToProps = ({directoriesList, directoriesLoading, 
 								directoriesError,visibleDirectories}) => ({
-	directoriesList, directoriesLoading, directoriesError
+	directoriesList, directoriesLoading, 
+	directoriesError, visibleDirectories
 });
 
 const mapDispatchToProps = (dispatch, {getDataDirectories}) => ({
 	fetchDirectories: () => fetchDirectories(getDataDirectories, dispatch)(),
+	showAllDirectories: () => dispatch(showAllDirectories()),
 	openModalDirectories: (data) => dispatch(openModalDirectories(data)),
 });
 

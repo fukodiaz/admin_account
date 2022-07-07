@@ -23,6 +23,11 @@ export default class AdminAccountService {
 		return res;
 	};
 
+	getUsers = async () => {
+		const res = await this.getResource(`/users`);
+		return res;
+	}
+
 	postData = async (url, data) => {
 		const res = await fetch(`${this._apiBase}${url}`, {
 			mode: 'cors',

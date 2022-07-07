@@ -9,6 +9,7 @@ import {router as personalPhotoRouter} from './routers/personal-photo-router.mjs
 import {router as newsImageRouter} from './routers/news-image-router.mjs';
 import {router as newsRouter} from './routers/news-router.mjs';
 import {router as directoriesRouter} from './routers/directories-router.mjs';
+import {router as usersRouter} from './routers/users-router.mjs';
 
 const app = express();
 const PORT = 3000;
@@ -29,6 +30,7 @@ app.use('/personalPhoto', personalPhotoRouter);
 app.use('/newsImage', newsImageRouter);
 app.use('/newsData', newsRouter);
 app.use('/directories', directoriesRouter);
+app.use('/users', usersRouter);
 
 app.listen(PORT);
 
