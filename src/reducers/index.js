@@ -75,13 +75,17 @@ const initialState = {
 
 	listOffices: null,
 	isActiveOffice: "educational",
+	currentDepartments: null,
+	listPositions: null,
 
 	usersList: null,
 	usersListLoading: false,
 	usersListError: false,
 
 	headingModalUser: null,
-	methodUser: null
+	methodUser: null,
+	position: '',
+	department: '',
 };
 
 const openBlock = (state, action) => {
@@ -138,6 +142,16 @@ const inputValueDefine = (state, {fieldName, payload}) => {
 				searchTitle: payload,
 				visibleListTitle:	defineVisibleListTitle(searchTitles(state.listTitleDirect, payload), 5)
 			}
+
+		case 'position_user':
+			return {
+				position: payload
+			}
+		case 'department_user':
+			return {
+				department: payload
+			}
+
 		default: return {}
 	}
 };
@@ -174,6 +188,23 @@ function searchTitles(listTitles, term) {
 																.indexOf(term.toLowerCase()) > -1);
 }
 
+//User
+
+function selectListDirect(listDirects, entityId) {
+	switch (entityId) {
+		case 'Offices': 
+			return listDirects.filter(({entityId}) => entityId === "Offices")
+									.map(({list}) => list)[0];
+		case 'positions':
+			return listDirects.filter(({entityId}) => entityId === "positions")
+									.map(({list}) => list)[0];
+	}
+} 
+
+function selectCurretDepartments(listOffices, isActiveOffice) {
+	return listOffices.filter(({entityId}) => entityId === isActiveOffice)
+								.map(({listDivision, title}) => [title.toLowerCase(), ...listDivision])[0];
+}
 
 const reducer = (state = initialState, action) => {
 
@@ -432,9 +463,8 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case 'FETCH_DIRECTORIES_SUCCESS':
-			const {flagAllDirectories} = state;
-			const listOffices = action.payload.filter(({entityId}) => entityId === "Offices")
-																.map(({list}) => list)[0];
+			const {flagAllDirectories, isActiveOffice} = state;
+			const listOffices =  selectListDirect(action.payload, 'Offices');
 
 			return {
 				...state,
@@ -443,7 +473,9 @@ const reducer = (state = initialState, action) => {
 				directoriesError: false,
 				visibleDirectories: defineVisibleItems(flagAllDirectories, action.payload, 2),
 				flagAllDirectories: !flagAllDirectories,
-				listOffices
+				listOffices,
+				currentDepartments: selectCurretDepartments(listOffices, isActiveOffice),
+				listPositions: selectListDirect(action.payload, 'positions')
 			}
 
 		case 'FETCH_DIRECTORIES_FAILURE':
@@ -520,7 +552,8 @@ const reducer = (state = initialState, action) => {
 		case 'FILTER_OFFICES':
 			return {
 				...state,
-				isActiveOffice: action.payload
+				isActiveOffice: action.payload,
+				currentDepartments: selectCurretDepartments(state.listOffices, action.payload)
 			}
 
 		case 'FETCH_USERS_DATA_REQUEST': 
@@ -551,7 +584,9 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				headingModalUser: 'headingNewUser',
-				methodUser: null
+				methodUser: null,
+				position: null,
+				department: null
 			}
 
 		default: 
