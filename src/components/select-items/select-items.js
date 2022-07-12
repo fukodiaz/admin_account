@@ -1,9 +1,11 @@
 import React from 'react';
 import Select from 'react-select';
 
+import './select-items.less';
+
 const SelectItems = (props) => {
-	const {value, dataOptions, inputChanged,
-			height, placeholder, name} = props;
+	const {value, dataOptions, onChangeSelect,
+			height, placeholder, name, prefix} = props;
 
 	const dot = (color = 'rgba(0,0,0,.7)') => ({
 		color,
@@ -22,7 +24,7 @@ const SelectItems = (props) => {
 			boxShadow: 'none',
 			border: state.isFocused ? '1px solid rgba(23, 135, 247, 0.4)' 
 											: '1px solid rgba(160, 158, 158, 0.7)',
-			outline: state.isFocused ? '2px solid rgba(23, 135, 247, 0.4) !important' : 'none',
+			outline: state.isFocused ? '2px solid rgba(23, 135, 247, 0.4) !important' : '1px solid transparent',
 			outlineOffset: '-2px',
 			'&:hover': {
 				borderColor: state.isFocused ? 'rgba(23, 135, 247, 0.4)' 
@@ -74,10 +76,10 @@ const SelectItems = (props) => {
 			margin: 0,
 			borderBottom: '1px solid rgba(160, 158, 158, 0.4)',
 			borderTop: '1px solid rgba(160, 158, 158, 0.1)',
-			':first-child': {
+			':first-of-type': {
 				borderTop: 'none'
 			},
-			':last-child': {
+			':last-of-type': {
 				borderBottom: 'none'
 			},
 			'&:hover': {
@@ -91,9 +93,9 @@ const SelectItems = (props) => {
 	return (
 		<Select 	value={value} name={name}
 					options={dataOptions}
-					onChange={(opt)=> inputChanged(name, opt)}
+					onChange={(opt)=> onChangeSelect(opt, name)}
 					styles={stylesItems} isSearchable={false}
-					placeholder={placeholder} >
+					placeholder={placeholder} classNamePrefix={prefix}>
 		</Select>
 	);
 };

@@ -212,6 +212,18 @@ const fetchUsersData = (methodService, dispatch) => () => {
 
 const openModalNewUser = () => ({type: 'OPEN_MODAL_NEW_USER'});
 
+const userDataRequested = () => ({type: 'USER_DATA_REQUEST'});
+
+const userDataSuccess = (payload) => ({
+	type: 'USER_DATA_SUCCESS',
+	payload
+}); 
+
+const userDataError = (payload) => ({
+	type: 'USER_DATA_FAILURE',
+	payload
+});
+
 export {
 	fetchOffers,
 	editingPersonalData,
@@ -252,5 +264,8 @@ export {
 	putTitleError,
 	filterOffices,
 	fetchUsersData,
-	openModalNewUser
+	openModalNewUser,
+	userDataRequested,
+	userDataSuccess,
+	userDataError
 };

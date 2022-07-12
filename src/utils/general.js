@@ -18,8 +18,12 @@ const changeStyleInvalidInput = (selector) => {
 	document.querySelector(selector).style.outlineOffset='-2px';
 };
 
-const changeStyleValidInput = (e) => {
+const changeStyleValidInput = (e, classContainer='') => {
 	if (e.target.value !== '') {
+		if (classContainer !== '') {
+			document.querySelector(classContainer).style.outline='none';
+			return null;
+		}
 		e.currentTarget.style.outline='none';
 	}
 };

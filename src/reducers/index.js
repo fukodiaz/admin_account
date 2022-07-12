@@ -86,6 +86,14 @@ const initialState = {
 	methodUser: null,
 	position: '',
 	department: '',
+	fioUser: '',
+	emailUser: '',
+	phoneUser: '',
+	passwordUser: '',
+
+	userDataLoading: false,
+	userDataError: false,
+
 };
 
 const openBlock = (state, action) => {
@@ -150,6 +158,22 @@ const inputValueDefine = (state, {fieldName, payload}) => {
 		case 'department_user':
 			return {
 				department: payload
+			}
+		case 'fio_user':
+			return {
+				fioUser: payload
+			}
+		case 'email_user':
+			return {
+				emailUser: payload
+			}
+		case 'phone_user':
+			return {
+				phoneUser: payload
+			}
+		case 'password_user':
+			return {
+				passwordUser: payload
 			}
 
 		default: return {}
@@ -584,9 +608,31 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				headingModalUser: 'headingNewUser',
-				methodUser: null,
+				methodUser: 'POST',
 				position: null,
 				department: null
+			}
+
+		case 'USER_DATA_REQUEST':
+			return {
+				...state,
+				userDataLoading: true,
+				userDataError: false,
+			}
+
+		case 'USER_DATA_SUCCESS':
+			return {
+				...state,
+				usersList: action.payload,
+				userDataLoading: false,
+				userDataError: false,
+			}
+		
+		case 'USER_DATA_FAILURE':
+			return {
+				...state,
+				userDataLoading: false,
+				userDataError: action.payload
 			}
 
 		default: 

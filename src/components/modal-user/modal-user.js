@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import {compose, withAdminAccountService} from '../hoc';
-import { inputChanged } from '../../actions';
-import { hideModal, onClickModalBox } from '../../utils';
+import { inputChanged, userDataRequested,
+			userDataSuccess, userDataError } from '../../actions';
+import { hideModal, onClickModalBox, changeStyleValidInput,
+			changeStyleInvalidInput } from '../../utils';
 
 import FormUser from '../form-user';
 import styles from './modal-user.m.less';
@@ -23,9 +25,63 @@ class ModalUser extends Component {
 		document.removeEventListener('keydown', this.handleKeyDown);
 	}
 
+	onChangeRequiredInput = (e, fieldName, classContainer) => {
+		this.props.inputChanged(fieldName, e.target.value);
+		changeStyleValidInput(e, classContainer);
+	}
+
+	onChangeSelect = (classControl, opt, fieldName) => {
+		this.props.inputChanged(fieldName, opt);
+		if (opt) {
+			document.querySelector(classControl).style.outline='none';
+		}
+	}
+
+	handleSubmit = (e) => {
+		e.preventDefault();
+		const {fio, position, email, phone, department, password,
+				methodUser, postUserData, userDataRequested, 
+				userDataSuccess, userDataError} = this.props;
+
+		if (fio==='' || !position || email==='' || !department) {
+			if (fio==='') {
+				changeStyleInvalidInput('[class^="containerInputFIO"]');
+			}
+			if (!position) {
+				changeStyleInvalidInput('[class^="position__control"]');
+			}
+			if (email==='') {
+				changeStyleInvalidInput('[class^="containerInputEmail"]');
+			}
+			if (!department) {
+				changeStyleInvalidInput('[class^="depart__control"]');
+			}
+			return null;
+		}
+
+		const formData = new FormData(e.target);
+		const json = JSON.stringify(Object.fromEntries(formData.entries(formData)));
+		
+		if (methodUser==='POST') {
+			userDataRequested();
+			postUserData(json)
+				.then(data => {
+					userDataSuccess(data); 
+					console.log(data, '222ggg');})
+				.catch(error => {userDataError(error);console.log(error, 44);})
+				.finally(() => {
+					e.target.reset();
+					hideModal('[class^="modalUser"]');
+				});
+
+		}
+
+
+	}
+
 	render() {
 		const {heading, currentDepartments, positions, inputChanged,
-				position, department} = this.props;
+				position, department, fio, email, phone, password} = this.props;
 		const dataOptionsDepartments = currentDepartments ? 
 						currentDepartments.map(data => ({'value':data, 'label': data})) : null;
 		const dataOptionsPositions = positions ? 
@@ -38,7 +94,10 @@ class ModalUser extends Component {
 					<div className={styles.modalUserContent}>
 						<FormUser heading={heading} dataOptionsDepartments={dataOptionsDepartments}
 									inputChanged={inputChanged} dataOptionsPositions={dataOptionsPositions}
-									position={position} department={department} />
+									position={position} onChangeRequiredInput={this.onChangeRequiredInput} 
+									department={department} fio={fio} email={email} phone={phone}
+									password={password} handleSubmit={this.handleSubmit}
+									onChangeSelect={this.onChangeSelect} />
 					</div>
 				</div>
 			</div>
@@ -47,25 +106,29 @@ class ModalUser extends Component {
 }
 
 const mapMethodsToProps = (adminAccountService) => ({
-	//putTitleDirectory: adminAccountService.putTitleDirectory
+	postUserData: adminAccountService.postUserData
 });
 
 const mapStateToProps = ({headingModalUser, currentDepartments, 
-	listPositions, position, department}) => ({
+	listPositions, position, department, fioUser, emailUser,
+	phoneUser, passwordUser, methodUser}) => ({
 	heading: headingModalUser,
 	currentDepartments,
 	positions: listPositions,
-	position, department
+	position, department,
+	fio: fioUser,
+	email: emailUser,
+	phone: phoneUser,
+	password: passwordUser,
+	methodUser
 	
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	inputChanged: (fieldName, value) => dispatch(inputChanged(fieldName, value)),
-	// onChange: (data) => dispatch(additInputChanged(data)),
-	// addIdAdditInput: (id) => dispatch(addIdAdditInput(id)),
-	// putTitleRequested: () => dispatch(putTitleRequested()),
-	// putTitleSuccess: (data) => dispatch(putTitleSuccess(data)),
-	// putTitleError: (error) => dispatch(putTitleError(error))
+	userDataRequested: () => dispatch(userDataRequested()),
+	userDataSuccess: (data) => dispatch(userDataSuccess(data)),
+	userDataError: (error) => dispatch(userDataError(error))
 });
 
 export default compose(

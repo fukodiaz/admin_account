@@ -11,17 +11,17 @@ export default class AdminAccountService {
 		}
 
 		return res.json();
-	}; 
+	}
 
 	getNewsList = async () => {
 		const res = await this.getResource(`/newsData`);
 		return res;
-	};
+	}
 
 	getDataDirectories = async () => {
 		const res = await this.getResource(`/directories`);
 		return res;
-	};
+	}
 
 	getUsers = async () => {
 		const res = await this.getResource(`/users`);
@@ -43,7 +43,7 @@ export default class AdminAccountService {
 		});
 	
 		return res.json();
-	};
+	}
 
 	postDataForm = async (json) => {
 		// const formData = new FormData(form);
@@ -51,7 +51,7 @@ export default class AdminAccountService {
 
 		const res = await this.postData(`/requests`, json);
 		return res;
-	};
+	}
 
 	postDataPersonal = async (data) => {
 		const res = await this.postData(`/personalData`, data);
@@ -73,6 +73,20 @@ export default class AdminAccountService {
 		return res;		
 	}
 
+	postUserData = async (data) => {
+		const res = await fetch(`${this._apiBase}/users`, {
+			mode: 'cors',
+			method: 'POST',
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Content-type': 'application/json'
+			},
+			body: data
+		});
+	
+		return res.json();
+	}
+
 	putNewsData = async (id, data) => {
 		const res = await fetch(`${this._apiBase}/newsData/${id}`, {
 			mode: 'cors',
@@ -84,7 +98,7 @@ export default class AdminAccountService {
 		});
 	
 		return res.json();
-	};
+	}
 
 	putTitleDirectory = async (id, data) => {
 		const res = await fetch(`${this._apiBase}/directories/${id}`, {
@@ -98,7 +112,7 @@ export default class AdminAccountService {
 		});
 	
 		return res.json();
-	};
+	}
 
 	deleteNews = async (id) => {
 		const res = await fetch(`${this._apiBase}/newsData/${id}`, {
@@ -110,6 +124,6 @@ export default class AdminAccountService {
 		});
 	
 		return res.json();
-	};
+	}
 
 }
