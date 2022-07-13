@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import {compose, withAdminAccountService} from '../hoc';
-import {fetchUsersData} from '../../actions';
+import {fetchUsersData, openModalEditUser, addIdUserDeleted} from '../../actions';
+import {openModal} from '../../utils';
 
 import styles from './users-table.m.less';
 import pencil from './pencil.svg';
@@ -12,6 +13,16 @@ class UsersTable extends Component {
 
 	componentDidMount() {
 		this.props.fetchUsersData();
+	}
+
+	editUser = (userData) => {
+		this.props.openModalEditUser(userData);
+		openModal('[class^="modalUser"]');
+	}
+
+	openModalConfirm = (idUser) => {
+		this.props.addIdUserDeleted(idUser);
+		openModal('[class^="modalConfirm"]');
 	}
 
 	createRow = (userData, idx) => {
@@ -27,7 +38,7 @@ class UsersTable extends Component {
 				<td className={styles.userPassword}>{password}</td>
 				<td className={styles.userActions}>
 					<button type="button" className={styles.buttonEditing}
-							onClick={() => {}}>
+							onClick={() => this.editUser(userData)}>
 						<p className={styles.svgBoxEditing}>
 							<svg width="100%" height="100%">
 								<use href={`${pencil}#pencil`}></use>
@@ -35,7 +46,7 @@ class UsersTable extends Component {
 						</p>
 					</button>
 					<button type="button" className={styles.buttonDel}
-							onClick={() => {}}>
+							onClick={() => this.openModalConfirm(entityId)}>
 						<p className={styles.svgBoxDel}>
 							<svg width="100%" height="100%">	
 								<use href={`${trash}#trash`}></use>
@@ -48,10 +59,8 @@ class UsersTable extends Component {
 	}
 
 	render() {
-		const {usersList, usersListError} = this.props;
-		console.log(usersList, 44);
-		console.log(usersListError, 22);
-		const contentUsers = usersList ?  usersList.map(this.createRow) : null;
+		const {usersList, usersListError, visUsersList} = this.props;
+		const contentUsers = visUsersList ?  visUsersList.map(this.createRow) : null;
 		return (
 			<table className={styles.tableUsers}>
 				<thead>
@@ -77,12 +86,15 @@ const mapMethodsToProps = (adminAccountService) => ({
 	getUsers: adminAccountService.getUsers,
 });
 
-const mapStateToProps = ({usersList, usersListError}) => ({
-	usersList, usersListError
+const mapStateToProps = ({usersList, usersListError, visibleUsersList}) => ({
+	usersList, usersListError,
+	visUsersList: visibleUsersList
 });
 
 const mapDispatchToProps = (dispatch, {getUsers}) => ({
-	fetchUsersData: () => fetchUsersData(getUsers, dispatch)()
+	fetchUsersData: () => fetchUsersData(getUsers, dispatch)(),
+	openModalEditUser: (payload) => dispatch(openModalEditUser(payload)),
+	addIdUserDeleted: (id) => dispatch(addIdUserDeleted(id))
 });
 
 export default compose(

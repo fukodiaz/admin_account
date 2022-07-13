@@ -114,12 +114,39 @@ export default class AdminAccountService {
 		return res.json();
 	}
 
+	putUserData = async (id, data) => {
+		const res = await fetch(`${this._apiBase}/users/${id}`, {
+			mode: 'cors',
+			method: 'PUT',
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Content-type': 'application/json',
+			},
+			body: data
+		});
+	
+		return res.json();
+	}
+
 	deleteNews = async (id) => {
 		const res = await fetch(`${this._apiBase}/newsData/${id}`, {
 			mode: 'cors',
 			method: 'DELETE',
 			headers: {
 				'Access-Control-Allow-Origin': '*',
+			}
+		});
+	
+		return res.json();
+	}
+
+	deleteUser = async (id) => {
+		const res = await fetch(`${this._apiBase}/users/${id}`, {
+			mode: 'cors',
+			method: 'DELETE',
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Content-type': 'application/json',
 			}
 		});
 	

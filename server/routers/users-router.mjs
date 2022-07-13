@@ -4,16 +4,18 @@ import client from '../models/client.mjs';
 
 export const router = Router();
 
+const mapPasswordUser = (user) => {
+	if (user.password) {
+		user.password = 'Получен';
+	} else {
+		user.password = 'Отсутствует';
+	}
+	return user;
+};
+
 router.get('/', async (req, res) => {
 	let result = JSON.parse(await client.execute(['JSON.GET', 'usersList']));
-	result = result.map(user => {
-		if (user.password) {
-			user.password = 'Получен';
-		} else {
-			user.password = 'Отсутствует';
-		}
-		return user;
-	});
+	result = result.map(mapPasswordUser);
 	
 	res.send(JSON.stringify(result));
 });
@@ -35,8 +37,40 @@ router.post('/', async(req, res) => {
 	const novelUsersList = [result, ...JSON.parse(prevUsersList)];
 	
 	await client.execute(['JSON.SET', 'usersList', '$', JSON.stringify(novelUsersList)]);
+	let novelDataUsersList = await client.execute(['JSON.GET', 'usersList']);
+	novelDataUsersList = JSON.parse(novelDataUsersList).map(mapPasswordUser);
+
+	res.send(JSON.stringify(novelDataUsersList));
+});
+
+router.put('/:id', async(req, res) => {
+	const userId = req.params.id;
+	const prevUsersList = JSON.parse(await client.execute(['JSON.GET', 'usersList']));
+	const prevUser = prevUsersList.find(({entityId}) => entityId === userId);
+	const userIndex = prevUsersList.findIndex(({entityId}) => entityId === userId);
+	const novelUser = {...prevUser};
+
+	novelUser.fio = req.body.fio_user;
+	novelUser.position = req.body.position_user;
+	novelUser.email = req.body.email_user;
+	novelUser.phone = req.body.phone_user;
+	novelUser.department = req.body.department_user;
+	novelUser.password = req.body.password_user;
+
+	const novelUsersList = [...prevUsersList.slice(0, userIndex), novelUser, ...prevUsersList.slice(userIndex + 1)];
+	await client.execute(['JSON.SET', 'usersList', '$', JSON.stringify(novelUsersList)]);
 	const novelDataUsersList = await client.execute(['JSON.GET', 'usersList']);
-	console.log(novelDataUsersList, 777);
+
+	res.send(novelDataUsersList);
+});
+
+router.delete('/:id', async(req, res) => {
+	const userId = req.params.id;
+	const prevUsersList = JSON.parse(await client.execute(['JSON.GET', 'usersList']));
+	const userIndex = await prevUsersList.findIndex(({entityId}) => entityId === userId);
+
+	await client.execute(['JSON.DEL', 'usersList', `$[${userIndex}]`]);
+	const novelDataUsersList = await client.execute(['JSON.GET', 'usersList']);
 
 	res.send(novelDataUsersList);
 });

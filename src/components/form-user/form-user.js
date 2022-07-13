@@ -9,7 +9,8 @@ const FormUser = (props) => {
 			onChangeRequiredInput, fio, email, phone,
 			password, handleSubmit, onChangeSelect} = props;
 	const contentHeading = heading === 'headingNewUser' ? 
-				<span>Добавить сотрудника <br /> выбранного управления</span> : null;
+				<span>Добавить сотрудника <br /> выбранного управления</span>
+				: 'Редактировать данные сотрудника';
 	
 	return (
 		<div className={styles.boxFormUser}>

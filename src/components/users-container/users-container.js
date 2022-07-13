@@ -9,6 +9,7 @@ import ListBtnsOffices from '../list-btns-offices';
 import BoxSearchUsers from '../box-search-users';
 import UsersTable from '../users-table';
 import ModalUser from '../modal-user';
+import ModalConfirm from '../modal-confirm';
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 import styles from './users-container.m.less';
@@ -36,6 +37,7 @@ class UsersContainer extends Component {
 				<BoxSearchUsers />
 				<UsersTable />
 				<ModalUser />
+				<ModalConfirm />
 			</div>
 		);
 	}

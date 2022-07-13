@@ -212,6 +212,11 @@ const fetchUsersData = (methodService, dispatch) => () => {
 
 const openModalNewUser = () => ({type: 'OPEN_MODAL_NEW_USER'});
 
+const openModalEditUser = (payload) => ({
+	type: 'OPEN_MODAL_EDIT_USER',
+	payload
+});
+
 const userDataRequested = () => ({type: 'USER_DATA_REQUEST'});
 
 const userDataSuccess = (payload) => ({
@@ -221,6 +226,35 @@ const userDataSuccess = (payload) => ({
 
 const userDataError = (payload) => ({
 	type: 'USER_DATA_FAILURE',
+	payload
+});
+
+const putUserDataRequested = () => ({type: 'PUT_USER_DATA_REQUEST'});
+
+const putUserDataSuccess = (payload) => ({
+	type: 'PUT_USER_DATA_SUCCESS',
+	payload
+}); 
+
+const putUserDataError = (payload) => ({
+	type: 'PUT_USER_DATA_FAILURE',
+	payload
+});
+
+const addIdUserDeleted = (payload) => ({
+	type: 'ADD_ID_USER_DELETED',
+	payload
+});
+
+const userDeleteRequested = () => ({type: 'DELETE_USER_REQUEST'});
+
+const userDeleted = (payload) => ({
+	type: 'DELETE_USER_SUCCESS',
+	payload
+});
+
+const userDeleteError = (payload) => ({
+	type: 'DELETE_USER_FAILURE',
 	payload
 });
 
@@ -267,5 +301,14 @@ export {
 	openModalNewUser,
 	userDataRequested,
 	userDataSuccess,
-	userDataError
+	userDataError,
+	openModalEditUser,
+	putUserDataRequested,
+	putUserDataSuccess,
+	putUserDataError,
+	addIdUserDeleted,
+	userDeleteRequested,
+	userDeleted,
+	userDeleteError
+
 };

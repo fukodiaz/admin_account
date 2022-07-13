@@ -48,6 +48,7 @@ const initialState = {
 	flagImageFile: false,
 
 	IdNewsDeleted: null,
+	pieceDeletedHeader: null,
 
 	//directories
 	flagOpenDirectories: true,
@@ -81,6 +82,7 @@ const initialState = {
 	usersList: null,
 	usersListLoading: false,
 	usersListError: false,
+	visibleUsersList: null,
 
 	headingModalUser: null,
 	methodUser: null,
@@ -90,9 +92,17 @@ const initialState = {
 	emailUser: '',
 	phoneUser: '',
 	passwordUser: '',
+	userId: null,
 
 	userDataLoading: false,
 	userDataError: false,
+
+	userPutInit: false,
+	userPutError: false,
+
+	IdUserDeleted: null,
+	userDeleteInit: false,
+	userDeleteError: false,
 
 };
 
@@ -229,6 +239,27 @@ function selectCurretDepartments(listOffices, isActiveOffice) {
 	return listOffices.filter(({entityId}) => entityId === isActiveOffice)
 								.map(({listDivision, title}) => [title.toLowerCase(), ...listDivision])[0];
 }
+
+const defineActiveOffice = ({listOffices}, department) => {
+	return listOffices.filter(office => { //return obj with an active Office
+		let {title, listDivision} = office;
+		listDivision = [title.toLowerCase(), ...listDivision];
+		let flagOffice = listDivision.some(label => label === department);
+		if (flagOffice) {
+			return office;
+		}
+		return null;
+	})[0];
+};
+
+const filterUsersByOffice = (user, idx, arr, state, isActiveOffice) => {
+	const {department} = user;
+	const activeOffice = defineActiveOffice(state, department);
+	if (isActiveOffice === activeOffice.entityId) {
+		return user;
+	}
+	return null;
+};
 
 const reducer = (state = initialState, action) => {
 
@@ -472,7 +503,8 @@ const reducer = (state = initialState, action) => {
 		case 'ADD_ID_NEWS_DELETED':
 			return {
 				...state,
-				IdNewsDeleted: action.payload
+				IdNewsDeleted: action.payload,
+				pieceDeletedHeader: 'новость',
 			}
 
 
@@ -574,10 +606,14 @@ const reducer = (state = initialState, action) => {
 		//Users
 
 		case 'FILTER_OFFICES':
+			const {payload} = action;
+			const visibleUsersList = state.usersList.filter(
+											(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, payload));
 			return {
 				...state,
-				isActiveOffice: action.payload,
-				currentDepartments: selectCurretDepartments(state.listOffices, action.payload)
+				isActiveOffice: payload,
+				currentDepartments: selectCurretDepartments(state.listOffices, payload),
+				visibleUsersList
 			}
 
 		case 'FETCH_USERS_DATA_REQUEST': 
@@ -585,21 +621,26 @@ const reducer = (state = initialState, action) => {
 				...state,
 				usersList: null,
 				usersListLoading: true,
-				usersListError: false
+				usersListError: false,
+				visibleUsersList: null
 			}
 
 		case 'FETCH_USERS_DATA_SUCCESS':
+			const visUsersList = action.payload.filter(
+						(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, state.isActiveOffice));
 			return {
 				...state,
 				usersList: action.payload,
 				usersListLoading: false,
-				usersListError: false
+				usersListError: false,
+				visibleUsersList: visUsersList
 			}
 
 		case 'FETCH_USERS_DATA_FAILURE':
 			return {
 				...state,
 				usersList: null,
+				visibleUsersList: null,
 				usersListLoading: false,
 				usersListError: action.payload
 			}
@@ -610,7 +651,11 @@ const reducer = (state = initialState, action) => {
 				headingModalUser: 'headingNewUser',
 				methodUser: 'POST',
 				position: null,
-				department: null
+				department: null,
+				fioUser: '',
+				emailUser: '',
+				phoneUser: '',
+				passwordUser: '',
 			}
 
 		case 'USER_DATA_REQUEST':
@@ -621,9 +666,12 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case 'USER_DATA_SUCCESS':
+			const visualUsersList = action.payload.filter(
+				(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, state.isActiveOffice));
 			return {
 				...state,
 				usersList: action.payload,
+				visibleUsersList: visualUsersList,
 				userDataLoading: false,
 				userDataError: false,
 			}
@@ -633,6 +681,82 @@ const reducer = (state = initialState, action) => {
 				...state,
 				userDataLoading: false,
 				userDataError: action.payload
+			}
+
+		case 'OPEN_MODAL_EDIT_USER':
+			const {fio, department, position, email, phone, password} = action.payload;
+			const activeOffice = defineActiveOffice(state, department); //full obj with an Office
+			const curDepartments = [activeOffice.title.toLowerCase(), ...activeOffice.listDivision];
+			return {
+				...state,
+				headingModalUser: 'headingEditUser',
+				methodUser: 'PUT',
+				position: {value: position, label: position},
+				department: {value: department, label:department},
+				fioUser: fio,
+				emailUser: email,
+				phoneUser: phone,
+				passwordUser: password,
+				userId: action.payload.entityId,
+				isActiveOffice: activeOffice.entityId,
+				currentDepartments: curDepartments
+			}
+
+		case 'PUT_USER_DATA_REQUEST':
+			return {
+				...state,
+				userPutInit: true,
+				userPutError: false
+			}
+
+		case 'PUT_USER_DATA_SUCCESS':
+			const viUsersList = action.payload.filter(
+				(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, state.isActiveOffice));
+			return {
+				...state,
+				userPutInit: false,
+				usersList: action.payload,
+				visibleUsersList: viUsersList,
+				userPutError: false
+			}	
+
+		case 'PUT_USER_DATA_FAILURE':
+			return {
+				...state,
+				userPutInit: false,
+				userPutError: action.payload
+			}
+
+		case 'ADD_ID_USER_DELETED': 
+			return {
+				...state,
+				IdUserDeleted: action.payload,
+				pieceDeletedHeader: 'данные сотрудника',
+			}
+
+		case 'DELETE_USER_REQUEST':
+			return {
+				...state,
+				userDeleteInit: true,
+				userDeleteError: false
+			}
+
+		case 'DELETE_USER_SUCCESS': 
+			const vUsersList = action.payload.filter(
+				(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, state.isActiveOffice));
+			return {
+				...state,
+				userDeleteInit: false,
+				usersList: action.payload,
+				visibleUsersList: vUsersList,
+				userDeleteError: false
+			}
+
+		case 'DELETE_USER_FAILURE':
+			return {
+				...state,
+				userDeleteInit: false,
+				userDeleteError: action.payload
 			}
 
 		default: 

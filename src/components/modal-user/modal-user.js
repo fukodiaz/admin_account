@@ -3,7 +3,9 @@ import {connect} from 'react-redux';
 
 import {compose, withAdminAccountService} from '../hoc';
 import { inputChanged, userDataRequested,
-			userDataSuccess, userDataError } from '../../actions';
+			userDataSuccess, userDataError,
+			putUserDataRequested, putUserDataSuccess,
+			putUserDataError } from '../../actions';
 import { hideModal, onClickModalBox, changeStyleValidInput,
 			changeStyleInvalidInput } from '../../utils';
 
@@ -41,7 +43,9 @@ class ModalUser extends Component {
 		e.preventDefault();
 		const {fio, position, email, phone, department, password,
 				methodUser, postUserData, userDataRequested, 
-				userDataSuccess, userDataError} = this.props;
+				userDataSuccess, userDataError, putUserData,
+				putUserDataRequested, putUserDataSuccess,
+				putUserDataError, userId} = this.props;
 
 		if (fio==='' || !position || email==='' || !department) {
 			if (fio==='') {
@@ -73,10 +77,18 @@ class ModalUser extends Component {
 					e.target.reset();
 					hideModal('[class^="modalUser"]');
 				});
-
 		}
 
-
+		if (methodUser==='PUT') {
+			putUserDataRequested();
+			putUserData(userId, json)
+				.then(data => {putUserDataSuccess(data); console.log(data, 77);})
+				.catch(error => {putUserDataError(error);console.log(error, rr);})
+				.finally(() => {
+					e.target.reset();
+					hideModal('[class^="modalUser"]');
+				});
+		}
 	}
 
 	render() {
@@ -106,12 +118,13 @@ class ModalUser extends Component {
 }
 
 const mapMethodsToProps = (adminAccountService) => ({
-	postUserData: adminAccountService.postUserData
+	postUserData: adminAccountService.postUserData,
+	putUserData: adminAccountService.putUserData
 });
 
 const mapStateToProps = ({headingModalUser, currentDepartments, 
 	listPositions, position, department, fioUser, emailUser,
-	phoneUser, passwordUser, methodUser}) => ({
+	phoneUser, passwordUser, methodUser, userId}) => ({
 	heading: headingModalUser,
 	currentDepartments,
 	positions: listPositions,
@@ -120,7 +133,7 @@ const mapStateToProps = ({headingModalUser, currentDepartments,
 	email: emailUser,
 	phone: phoneUser,
 	password: passwordUser,
-	methodUser
+	methodUser, userId
 	
 });
 
@@ -128,7 +141,10 @@ const mapDispatchToProps = (dispatch) => ({
 	inputChanged: (fieldName, value) => dispatch(inputChanged(fieldName, value)),
 	userDataRequested: () => dispatch(userDataRequested()),
 	userDataSuccess: (data) => dispatch(userDataSuccess(data)),
-	userDataError: (error) => dispatch(userDataError(error))
+	userDataError: (error) => dispatch(userDataError(error)),
+	putUserDataRequested: () => dispatch(putUserDataRequested()),
+	putUserDataSuccess: (data) => dispatch(putUserDataSuccess(data)),
+	putUserDataError: (error) => dispatch(putUserDataError(error))
 });
 
 export default compose(
