@@ -258,6 +258,8 @@ const userDeleteError = (payload) => ({
 	payload
 });
 
+const onSearchUsers = () => ({type: 'ON_SEARCH_USERS'});
+
 export {
 	fetchOffers,
 	editingPersonalData,
@@ -309,6 +311,7 @@ export {
 	addIdUserDeleted,
 	userDeleteRequested,
 	userDeleted,
-	userDeleteError
+	userDeleteError,
+	onSearchUsers
 
 };

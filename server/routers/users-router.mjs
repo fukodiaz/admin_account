@@ -4,18 +4,21 @@ import client from '../models/client.mjs';
 
 export const router = Router();
 
-const mapPasswordUser = (user) => {
+const mapDataUser = (user) => {
 	if (user.password) {
 		user.password = 'Получен';
 	} else {
 		user.password = 'Отсутствует';
 	}
+	if (!user.phone) {
+		user.phone = 'Отсутствует';
+	} 
 	return user;
 };
 
 router.get('/', async (req, res) => {
 	let result = JSON.parse(await client.execute(['JSON.GET', 'usersList']));
-	result = result.map(mapPasswordUser);
+	result = result.map(mapDataUser);
 	
 	res.send(JSON.stringify(result));
 });
@@ -38,7 +41,7 @@ router.post('/', async(req, res) => {
 	
 	await client.execute(['JSON.SET', 'usersList', '$', JSON.stringify(novelUsersList)]);
 	let novelDataUsersList = await client.execute(['JSON.GET', 'usersList']);
-	novelDataUsersList = JSON.parse(novelDataUsersList).map(mapPasswordUser);
+	novelDataUsersList = JSON.parse(novelDataUsersList).map(mapDataUser);
 
 	res.send(JSON.stringify(novelDataUsersList));
 });
@@ -59,9 +62,10 @@ router.put('/:id', async(req, res) => {
 
 	const novelUsersList = [...prevUsersList.slice(0, userIndex), novelUser, ...prevUsersList.slice(userIndex + 1)];
 	await client.execute(['JSON.SET', 'usersList', '$', JSON.stringify(novelUsersList)]);
-	const novelDataUsersList = await client.execute(['JSON.GET', 'usersList']);
+	let novelDataUsersList = await client.execute(['JSON.GET', 'usersList']);
+	novelDataUsersList = JSON.parse(novelDataUsersList).map(mapDataUser);
 
-	res.send(novelDataUsersList);
+	res.send(JSON.stringify(novelDataUsersList));
 });
 
 router.delete('/:id', async(req, res) => {
@@ -70,7 +74,8 @@ router.delete('/:id', async(req, res) => {
 	const userIndex = await prevUsersList.findIndex(({entityId}) => entityId === userId);
 
 	await client.execute(['JSON.DEL', 'usersList', `$[${userIndex}]`]);
-	const novelDataUsersList = await client.execute(['JSON.GET', 'usersList']);
+	let novelDataUsersList = await client.execute(['JSON.GET', 'usersList']);
+	novelDataUsersList = JSON.parse(novelDataUsersList).map(mapDataUser);
 
-	res.send(novelDataUsersList);
+	res.send(JSON.stringify(novelDataUsersList));
 });

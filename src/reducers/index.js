@@ -82,7 +82,7 @@ const initialState = {
 	usersList: null,
 	usersListLoading: false,
 	usersListError: false,
-	visibleUsersList: null,
+	visibleUsersList: [],
 
 	headingModalUser: null,
 	methodUser: null,
@@ -103,6 +103,8 @@ const initialState = {
 	IdUserDeleted: null,
 	userDeleteInit: false,
 	userDeleteError: false,
+
+	searchUsers: '',
 
 };
 
@@ -186,6 +188,14 @@ const inputValueDefine = (state, {fieldName, payload}) => {
 				passwordUser: payload
 			}
 
+		case 'searchUsers':
+			// const visibUsersList = state.usersList.filter(
+			// 	(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, state.isActiveOffice));
+			return {
+				searchUsers: payload,
+				//visibleUsersList: searchingUsers(visibUsersList, payload)
+			}
+
 		default: return {}
 	}
 };
@@ -260,6 +270,20 @@ const filterUsersByOffice = (user, idx, arr, state, isActiveOffice) => {
 	}
 	return null;
 };
+
+function searchingUsers(listUsers, term) {
+	if (term === '') {
+		return listUsers;
+	}
+
+	return listUsers.filter(user => {
+		const {fio, email} = user;
+		const fioChecked = fio.toLowerCase().indexOf(term.toLowerCase()); 
+		const emailChecked = email.toLowerCase().indexOf(term.toLowerCase());
+		if (fioChecked > -1 || emailChecked > -1) { return user; }
+		return null;
+	});
+}
 
 const reducer = (state = initialState, action) => {
 
@@ -622,7 +646,7 @@ const reducer = (state = initialState, action) => {
 				usersList: null,
 				usersListLoading: true,
 				usersListError: false,
-				visibleUsersList: null
+				visibleUsersList: []
 			}
 
 		case 'FETCH_USERS_DATA_SUCCESS':
@@ -640,7 +664,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				usersList: null,
-				visibleUsersList: null,
+				visibleUsersList: [],
 				usersListLoading: false,
 				usersListError: action.payload
 			}
@@ -757,6 +781,14 @@ const reducer = (state = initialState, action) => {
 				...state,
 				userDeleteInit: false,
 				userDeleteError: action.payload
+			}
+
+		case 'ON_SEARCH_USERS':
+			const visibUsersList = state.usersList.filter(
+				(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, state.isActiveOffice));
+			return {
+				...state,
+				visibleUsersList: searchingUsers(visibUsersList, state.searchUsers)
 			}
 
 		default: 

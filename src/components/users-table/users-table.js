@@ -25,12 +25,13 @@ class UsersTable extends Component {
 		openModal('[class^="modalConfirm"]');
 	}
 
-	createRow = (userData, idx) => {
-		const {entityId, fio, department, position, email, phone, password} = userData;
+	createRow = (user, idx, arr) => {
+		const userData = arr[arr.length - idx - 1];
+		const {entityId, fio, department, email, phone, password} = userData;
 
 		return (
 			<tr key={entityId} className={styles.rowTbodyUser}>
-				<td className={styles.userIndex}>{++idx}</td>
+				<td className={styles.userIndex}>{arr.length - idx}</td>
 				<td className={styles.userFIO}>{fio}</td>
 				<td className={styles.userDepartment}>{department}</td>
 				<td className={styles.userPhone}>{phone}</td>
