@@ -27,11 +27,11 @@ class UsersTable extends Component {
 
 	createRow = (user, idx, arr) => {
 		const userData = arr[arr.length - idx - 1];
-		const {entityId, fio, department, email, phone, password} = userData;
+		const {entityId, index, fio, department, email, phone, password} = userData;
 
 		return (
 			<tr key={entityId} className={styles.rowTbodyUser}>
-				<td className={styles.userIndex}>{arr.length - idx}</td>
+				<td className={styles.userIndex}>{index}</td>
 				<td className={styles.userFIO}>{fio}</td>
 				<td className={styles.userDepartment}>{department}</td>
 				<td className={styles.userPhone}>{phone}</td>

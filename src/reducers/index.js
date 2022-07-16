@@ -294,6 +294,11 @@ function defineShowingUsers(visibleListUsers, activeIdx, quantity) { //quantity 
 	return [...visibleListUsers.slice(quantity*activeIdx, (activeIdx+1)*quantity)];
 }
 
+const addIndexObj = (item, index) => ({
+	index: index + 1, ...item
+});
+
+
 const reducer = (state = initialState, action) => {
 
 	switch (action.type) {
@@ -640,8 +645,9 @@ const reducer = (state = initialState, action) => {
 
 		case 'FILTER_OFFICES':
 			const {payload} = action;
-			const visibleUsersList = state.usersList.filter(
+			let visibleUsersList = state.usersList.filter(
 											(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, payload));
+			visibleUsersList = visibleUsersList.map(addIndexObj);
 			return {
 				...state,
 				isActiveOffice: payload,
@@ -662,8 +668,9 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case 'FETCH_USERS_DATA_SUCCESS':
-			const visUsersList = action.payload.filter(
+			let visUsersList = action.payload.filter(
 						(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, state.isActiveOffice));
+			visUsersList = visUsersList.map(addIndexObj);
 			return {
 				...state,
 				usersList: action.payload,
@@ -703,8 +710,9 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case 'USER_DATA_SUCCESS':
-			const visualUsersList = action.payload.filter(
+			let visualUsersList = action.payload.filter(
 				(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, state.isActiveOffice));
+			visualUsersList = visualUsersList.map(addIndexObj);
 			return {
 				...state,
 				usersList: action.payload,
@@ -748,8 +756,9 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case 'PUT_USER_DATA_SUCCESS':
-			const viUsersList = action.payload.filter(
+			let viUsersList = action.payload.filter(
 				(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, state.isActiveOffice));
+			viUsersList = viUsersList.map(addIndexObj);
 			return {
 				...state,
 				userPutInit: false,
@@ -781,8 +790,9 @@ const reducer = (state = initialState, action) => {
 			}
 
 		case 'DELETE_USER_SUCCESS': 
-			const vUsersList = action.payload.filter(
+			let vUsersList = action.payload.filter(
 				(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, state.isActiveOffice));
+			vUsersList = vUsersList.map(addIndexObj);
 			return {
 				...state,
 				userDeleteInit: false,
@@ -802,7 +812,8 @@ const reducer = (state = initialState, action) => {
 		case 'ON_SEARCH_USERS':
 			const visibUsersList = state.usersList.filter(
 				(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, state.isActiveOffice));
-			const searchUsersList = searchingUsers(visibUsersList, state.searchUsers);
+			let searchUsersList = searchingUsers(visibUsersList, state.searchUsers);
+			searchUsersList = searchUsersList.map(addIndexObj);
 			return {
 				...state,
 				visibleUsersList: searchUsersList,
@@ -824,6 +835,15 @@ const reducer = (state = initialState, action) => {
 				...state,
 				activeIdxPagin: action.payload,
 				showingUsersList: defineShowingUsers(state.visibleUsersList, action.payload, 2)
+			}
+
+		case 'ON_LAST_BTN_PAGIN':
+			const {active, start} = action.payload;
+			return {
+				...state,	
+				activeIdxPagin: active,
+				startPagin: start,
+				showingUsersList: defineShowingUsers(state.visibleUsersList, active, 2)
 			}
 
 		default: 

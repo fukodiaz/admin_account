@@ -270,6 +270,11 @@ const onBtnPagin = (payload) => ({
 	payload
 });
 
+const onLastBtnPagin = (payload) => ({
+	type: 'ON_LAST_BTN_PAGIN',
+	payload
+});
+
 export {
 	fetchOffers,
 	editingPersonalData,
@@ -324,6 +329,7 @@ export {
 	userDeleteError,
 	onSearchUsers,
 	onBtnArrow,
-	onBtnPagin
+	onBtnPagin,
+	onLastBtnPagin
 
 };

@@ -20,9 +20,6 @@ class PaginationUsers extends Component {
 	defineAbledBtnArrow = (activeIdx, totalPaginBtns) => {
 		if (activeIdx === 0) {
 			this.setState({disabledPrev: true});
-			if (totalPaginBtns === 1) {
-				this.setState({disabledNext: true});
-			}
 		} else {
 			this.setState({disabledPrev: false});
 		}
@@ -30,6 +27,9 @@ class PaginationUsers extends Component {
 			this.setState({disabledNext: true});
 		} else {
 			this.setState({disabledNext: false});
+		}
+		if (totalPaginBtns === 1) {
+			this.setState({disabledNext: true});
 		}
 	}
 
@@ -40,7 +40,6 @@ class PaginationUsers extends Component {
 	componentDidUpdate(prevProps, prevState) {
 		const {visibleUsersList, activeIdx, start, onBtnPagin} = this.props;
 		const {totalPaginBtns, range, arrCountVisBtns} = this.state;
-		console.log(visibleUsersList, 'vis');
 		if (prevProps.visibleUsersList.length !== visibleUsersList.length) {
 			this.setState({totalPaginBtns: visibleUsersList.length ? Math.ceil(visibleUsersList.length/2) : 0});
 		}
@@ -73,7 +72,7 @@ class PaginationUsers extends Component {
 			this.setState({btnsMain: btns});
 		}
 
-		if (prevProps.activeIdx !== activeIdx || prevProps.visibleUsersList !== visibleUsersList) {
+		if (prevProps.activeIdx !== activeIdx || prevState.totalPaginBtns !== totalPaginBtns) {
 			this.defineAbledBtnArrow(this.props.activeIdx, this.state.totalPaginBtns);
 		}
 	}
@@ -83,40 +82,33 @@ class PaginationUsers extends Component {
 		const { activeIdx, onBtnArrow, start} = this.props;
 		if (direct === 'prev') {
 			if (activeIdx - 1 >= 0) {
-				// this.setState(({activeIdx}) => {
-				// 	return {activeIdx: activeIdx - 1} 
-				// });
 				onBtnArrow({activeIdxShift: -1});
-
 				if (start >= activeIdx + 1) {
-					// this.setState(({start}) => {
-					// 	return {start: start - 1} 
-					// });
 					onBtnArrow({startShift: -1});
 				}
 			}
 		}
 
 		if (direct === 'next') {
-			if (activeIdx + 1 < totalPaginBtns) {
-				// this.setState(({activeIdx}) => {
-				// 	return {activeIdx: activeIdx + 1} 
-				// });
+			if (activeIdx + 1 < (totalPaginBtns - 1)) {
 				onBtnArrow({activeIdxShift: 1});
 
 				if ((range + start) <= (activeIdx + 2)) {
-					// this.setState(({start}) => {
-					// 	return {start: start + 1} 
-					// });
 					onBtnArrow({startShift: 1});
 				}
 			} 
+
+			if (activeIdx + 2 === totalPaginBtns) {
+				onBtnArrow({activeIdxShift: 1});
+			}
 		}
 	}
 
 	render() {
-		const {visibleUsersList} = this.props;
-		const {btnsMain, activeIdx, disabledPrev, disabledNext, totalPaginBtns} = this.state;
+		const {visibleUsersList, activeIdx, start, onBtnPagin, onLastBtn} = this.props;
+		const {btnsMain, disabledPrev, disabledNext, totalPaginBtns, range} = this.state;
+		const classLastBtn = activeIdx === (totalPaginBtns-1) ? 'activeBtnMain' : 'btnMain';
+		const payloadLastBtn = {active:totalPaginBtns - 1, start: totalPaginBtns-range};
 		const	contentBtnArrowPrev = totalPaginBtns ? (
 					<div className={styles.itemBtnArrow}>
 						<button type="button" className={styles.btnArrowPrev}
@@ -141,6 +133,21 @@ class PaginationUsers extends Component {
 							</p>
 						</button>
 					</div>) : null;
+		const lastBtn = totalPaginBtns > range ? (
+					<li key={totalPaginBtns} className={styles.itemBtnMain}>
+						<button type="button" className={styles[classLastBtn]}
+									onClick={() => onLastBtn(payloadLastBtn)}>
+							{totalPaginBtns}
+						</button>
+					</li>	
+				) : null;
+		const btnEllipsis = (start + range) < totalPaginBtns ? (
+					<li key='ellips' className={styles.itemBtnMain}>
+						<button type="button" className={styles.btnEllipsis}>
+							...
+						</button>
+					</li>	
+				) : null;
 
 		return (
 			<div>
@@ -148,6 +155,8 @@ class PaginationUsers extends Component {
 					{contentBtnArrowPrev}
 					<ul className={styles.pagination}>
 						{btnsMain}
+						{btnEllipsis}
+						{lastBtn}
 					</ul>
 					{contentBtnArrowNext}
 				</div>
