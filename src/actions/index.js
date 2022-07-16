@@ -260,6 +260,16 @@ const userDeleteError = (payload) => ({
 
 const onSearchUsers = () => ({type: 'ON_SEARCH_USERS'});
 
+const onBtnArrow = (payload) => ({
+	type: 'ON_BTN_ARROW',
+	payload
+});
+
+const onBtnPagin = (payload) => ({
+	type: 'ON_BTN_PAGIN',
+	payload
+});
+
 export {
 	fetchOffers,
 	editingPersonalData,
@@ -312,6 +322,8 @@ export {
 	userDeleteRequested,
 	userDeleted,
 	userDeleteError,
-	onSearchUsers
+	onSearchUsers,
+	onBtnArrow,
+	onBtnPagin
 
 };

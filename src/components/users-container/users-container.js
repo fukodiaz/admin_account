@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import {compose, withAdminAccountService} from '../hoc';
 import {filterOffices, openModalNewUser, inputChanged,
-			onSearchUsers} from '../../actions'; 
+			onSearchUsers, onBtnArrow, onBtnPagin} from '../../actions'; 
 import {openModal} from '../../utils';
 
 import ListBtnsOffices from '../list-btns-offices';
@@ -26,7 +26,8 @@ class UsersContainer extends Component {
 	render() {
 		const {listOffices, filterOffices, isActiveOffice,
 				inputChanged, onSearch, searchUsers,
-				visibleUsersList} = this.props;
+				visibleUsersList, start, onBtnArrow, 
+				activeIdx, onBtnPagin} = this.props;
 		
 		return (
 			<div>
@@ -43,7 +44,8 @@ class UsersContainer extends Component {
 				<UsersTable />
 				<ModalUser />
 				<ModalConfirm />
-				<PaginationUsers visibleUsersList={visibleUsersList} />
+				<PaginationUsers visibleUsersList={visibleUsersList} start={start}
+							onBtnArrow={onBtnArrow} activeIdx={activeIdx} onBtnPagin={onBtnPagin} />
 			</div>
 		);
 	}
@@ -54,16 +56,20 @@ const mapMethodsToProps = (adminAccountService) => ({
 });
 
 const mapStateToProps = ({listOffices, isActiveOffice, searchUsers, 
-	visibleUsersList}) => ({
+	visibleUsersList, startPagin, activeIdxPagin}) => ({
 	listOffices, isActiveOffice,
-	searchUsers, visibleUsersList
+	searchUsers, visibleUsersList,
+	start: startPagin,
+	activeIdx: activeIdxPagin
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	filterOffices: (id) => dispatch(filterOffices(id)),
 	openModalNewUser: () => dispatch(openModalNewUser()),
 	inputChanged: (fieldName, value) => dispatch(inputChanged(fieldName, value)),
-	onSearch: () => dispatch(onSearchUsers())
+	onSearch: () => dispatch(onSearchUsers()),
+	onBtnArrow: (data) => dispatch(onBtnArrow(data)),
+	onBtnPagin: (idx) => dispatch(onBtnPagin(idx))
 });
 
 export default compose(

@@ -7,25 +7,47 @@ import arrowNext from './arrow-next.svg';
 class PaginationUsers extends Component {
 	state = {
 		totalPaginBtns: null,
+		range: 3, //quantity of visible main buttons
+		//start: 1, // index of a first main button
 		arrCountVisBtns: [],
 		btnsMain: null,
 		flagBtnEllipsis: false,
-		activeIdx: 0,
+		//activeIdx: 0,
 		disabledPrev: false,
 		disabledNext: false
 	} 
 
+	defineAbledBtnArrow = (activeIdx, totalPaginBtns) => {
+		if (activeIdx === 0) {
+			this.setState({disabledPrev: true});
+			if (totalPaginBtns === 1) {
+				this.setState({disabledNext: true});
+			}
+		} else {
+			this.setState({disabledPrev: false});
+		}
+		if ((activeIdx + 1) === totalPaginBtns) {
+			this.setState({disabledNext: true});
+		} else {
+			this.setState({disabledNext: false});
+		}
+	}
+
+	componentDidMount() {
+		this.defineAbledBtnArrow(this.props.activeIdx, this.state.totalPaginBtns);
+	}
+
 	componentDidUpdate(prevProps, prevState) {
-		const {visibleUsersList} = this.props;
-		const {totalPaginBtns, arrCountVisBtns, activeIdx} = this.state;
+		const {visibleUsersList, activeIdx, start, onBtnPagin} = this.props;
+		const {totalPaginBtns, range, arrCountVisBtns} = this.state;
 		console.log(visibleUsersList, 'vis');
 		if (prevProps.visibleUsersList.length !== visibleUsersList.length) {
 			this.setState({totalPaginBtns: visibleUsersList.length ? Math.ceil(visibleUsersList.length/2) : 0});
 		}
 
-		if (prevState.totalPaginBtns !== totalPaginBtns) {
+		if (prevState.totalPaginBtns !== totalPaginBtns || prevProps.start !== start) {
 			if (totalPaginBtns) {
-				for (let i = 1, arr = []; i <= totalPaginBtns && i <= 3; i++) {
+				for (let i = start, arr = []; i <= totalPaginBtns && arr.length < range; i++) {
 					arr = [...arr, i];
 					this.setState({arrCountVisBtns:  arr});
 				}
@@ -35,14 +57,14 @@ class PaginationUsers extends Component {
 			}
 		}
 
-		if (prevState.arrCountVisBtns !== arrCountVisBtns || prevState.activeIdx !== activeIdx) {
-			console.log(arrCountVisBtns, 'arrBtns');
+		if (prevState.arrCountVisBtns !== arrCountVisBtns || prevProps.activeIdx !== activeIdx) {
 			const btns = arrCountVisBtns.map(item => {
 				const classBtnMain = activeIdx === item - 1 ? 'activeBtnMain' : 'btnMain';
 				
 				return(
 					<li key={item} className={styles.itemBtnMain}>
-						<button type="button" className={styles[classBtnMain]}>
+						<button type="button" className={styles[classBtnMain]}
+									onClick={() => onBtnPagin(item - 1)}>
 							{item}
 						</button>
 					</li>	
@@ -50,40 +72,52 @@ class PaginationUsers extends Component {
 			});
 			this.setState({btnsMain: btns});
 		}
+
+		if (prevProps.activeIdx !== activeIdx || prevProps.visibleUsersList !== visibleUsersList) {
+			this.defineAbledBtnArrow(this.props.activeIdx, this.state.totalPaginBtns);
+		}
 	}
 
 	onClickArrow = (direct) => {
-		const {totalPaginBtns, activeIdx} = this.state;
+		const {totalPaginBtns, range} = this.state;
+		const { activeIdx, onBtnArrow, start} = this.props;
 		if (direct === 'prev') {
 			if (activeIdx - 1 >= 0) {
-				this.setState(({activeIdx}) => {
-					return {activeIdx: activeIdx - 1} 
-				});
-				this.setState({disabledNext: false});
-			} else {
-				this.setState({disabledPrev: true});
+				// this.setState(({activeIdx}) => {
+				// 	return {activeIdx: activeIdx - 1} 
+				// });
+				onBtnArrow({activeIdxShift: -1});
+
+				if (start >= activeIdx + 1) {
+					// this.setState(({start}) => {
+					// 	return {start: start - 1} 
+					// });
+					onBtnArrow({startShift: -1});
+				}
 			}
 		}
 
 		if (direct === 'next') {
 			if (activeIdx + 1 < totalPaginBtns) {
-				this.setState(({activeIdx}) => {
-					return {activeIdx: activeIdx + 1} 
-				});
-				this.setState({disabledPrev: false});
-			} else {
-				this.setState({disabledNext: true});
-			}
+				// this.setState(({activeIdx}) => {
+				// 	return {activeIdx: activeIdx + 1} 
+				// });
+				onBtnArrow({activeIdxShift: 1});
+
+				if ((range + start) <= (activeIdx + 2)) {
+					// this.setState(({start}) => {
+					// 	return {start: start + 1} 
+					// });
+					onBtnArrow({startShift: 1});
+				}
+			} 
 		}
 	}
 
 	render() {
 		const {visibleUsersList} = this.props;
-		const {btnsMain, activeIdx, disabledPrev, disabledNext} = this.state;
-		
-		return (
-			<div>
-				<div className={styles.boxPagination}>
+		const {btnsMain, activeIdx, disabledPrev, disabledNext, totalPaginBtns} = this.state;
+		const	contentBtnArrowPrev = totalPaginBtns ? (
 					<div className={styles.itemBtnArrow}>
 						<button type="button" className={styles.btnArrowPrev}
 									onClick={() => this.onClickArrow('prev')}
@@ -94,10 +128,8 @@ class PaginationUsers extends Component {
 								</svg>
 							</p>
 						</button>
-					</div>	
-					<ul className={styles.pagination}>
-						{btnsMain}
-					</ul>
+					</div>) : null;
+		const contentBtnArrowNext = totalPaginBtns ? (
 					<div className={styles.itemBtnArrow}>
 						<button type="button" className={styles.btnArrowNext}
 									onClick={() => this.onClickArrow('next')}
@@ -108,7 +140,16 @@ class PaginationUsers extends Component {
 								</svg>
 							</p>
 						</button>
-					</div>	
+					</div>) : null;
+
+		return (
+			<div>
+				<div className={styles.boxPagination}>
+					{contentBtnArrowPrev}
+					<ul className={styles.pagination}>
+						{btnsMain}
+					</ul>
+					{contentBtnArrowNext}
 				</div>
 			</div>
 		);

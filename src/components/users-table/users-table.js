@@ -60,8 +60,8 @@ class UsersTable extends Component {
 	}
 
 	render() {
-		const {usersList, usersListError, visUsersList} = this.props;
-		const contentUsers = visUsersList ?  visUsersList.map(this.createRow) : null;
+		const {usersListError, visUsersList, showingUsers} = this.props;
+		const contentUsers = showingUsers ?  showingUsers.map(this.createRow) : null;
 		return (
 			<table className={styles.tableUsers}>
 				<thead>
@@ -87,9 +87,11 @@ const mapMethodsToProps = (adminAccountService) => ({
 	getUsers: adminAccountService.getUsers,
 });
 
-const mapStateToProps = ({usersList, usersListError, visibleUsersList}) => ({
+const mapStateToProps = ({usersList, usersListError, 
+	visibleUsersList, showingUsersList}) => ({
 	usersList, usersListError,
-	visUsersList: visibleUsersList
+	visUsersList: visibleUsersList,
+	showingUsers: showingUsersList
 });
 
 const mapDispatchToProps = (dispatch, {getUsers}) => ({
