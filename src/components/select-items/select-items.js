@@ -5,7 +5,7 @@ import './select-items.less';
 
 const SelectItems = (props) => {
 	const {value, dataOptions, onChangeSelect,
-			height, placeholder, name, prefix} = props;
+			height, placeholder='', name, prefix=''} = props;
 
 	const dot = (color = 'rgba(0,0,0,.7)') => ({
 		color,
@@ -20,6 +20,7 @@ const SelectItems = (props) => {
 		indicatorSeparator: (styles) => ({display:'none'}),
 		control: (base, state) => ({
 			...base,
+			//maxHeight: '32px !important',
 			position: 'relative',
 			boxShadow: 'none',
 			border: state.isFocused ? '1px solid rgba(23, 135, 247, 0.4)' 
@@ -73,6 +74,8 @@ const SelectItems = (props) => {
 			lineHeight: '20px',
 			backgroundColor: state.isSelected ? 'rgba(160, 158, 158, 0.2)' : '#fff',
 			padding: '9px 11px 10px',
+		// 	paddingTop: '5px',
+		// paddingBottom: '5px',
 			margin: 0,
 			borderBottom: '1px solid rgba(160, 158, 158, 0.4)',
 			borderTop: '1px solid rgba(160, 158, 158, 0.1)',
@@ -85,7 +88,7 @@ const SelectItems = (props) => {
 			'&:hover': {
 				backgroundColor: 'rgba(160, 158, 158, 0.2)'
 			}
-		}),
+		})
 	});
 
 	const stylesItems = selectStyles(height);

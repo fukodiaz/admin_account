@@ -275,6 +275,13 @@ const onLastBtnPagin = (payload) => ({
 	payload
 });
 
+const selectChanged = (payload, name, start) => ({
+	type: 'SELECT_CHANGED',
+	payload,
+	name,
+	start
+});
+
 export {
 	fetchOffers,
 	editingPersonalData,
@@ -330,6 +337,7 @@ export {
 	onSearchUsers,
 	onBtnArrow,
 	onBtnPagin,
-	onLastBtnPagin
+	onLastBtnPagin,
+	selectChanged
 
 };

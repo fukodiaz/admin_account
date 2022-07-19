@@ -108,7 +108,8 @@ const initialState = {
 	searchUsers: '',
 
 	startPagin: 1,
-	activeIdxPagin: 0
+	activeIdxPagin: 0,
+	curSelectedPage: 1
 
 };
 
@@ -655,7 +656,8 @@ const reducer = (state = initialState, action) => {
 				visibleUsersList,
 				startPagin: 1,
 				activeIdxPagin: 0,
-				showingUsersList: defineShowingUsers(visibleUsersList, 0, 2)
+				showingUsersList: defineShowingUsers(visibleUsersList, 0, 2),
+				curSelectedPage: 1
 			}
 
 		case 'FETCH_USERS_DATA_REQUEST': 
@@ -827,14 +829,16 @@ const reducer = (state = initialState, action) => {
 				...state,
 				startPagin: state.startPagin + startShift,
 				activeIdxPagin: curActiveIdx,
-				showingUsersList: defineShowingUsers(state.visibleUsersList, curActiveIdx, 2)
+				showingUsersList: defineShowingUsers(state.visibleUsersList, curActiveIdx, 2),
+				curSelectedPage: curActiveIdx + 1
 			}
 
 		case 'ON_BTN_PAGIN': 
 			return {
 				...state,
 				activeIdxPagin: action.payload,
-				showingUsersList: defineShowingUsers(state.visibleUsersList, action.payload, 2)
+				showingUsersList: defineShowingUsers(state.visibleUsersList, action.payload, 2),
+				curSelectedPage: action.payload + 1
 			}
 
 		case 'ON_LAST_BTN_PAGIN':
@@ -843,7 +847,18 @@ const reducer = (state = initialState, action) => {
 				...state,	
 				activeIdxPagin: active,
 				startPagin: start,
-				showingUsersList: defineShowingUsers(state.visibleUsersList, active, 2)
+				showingUsersList: defineShowingUsers(state.visibleUsersList, active, 2),
+				curSelectedPage: active + 1
+			}
+
+		case 'SELECT_CHANGED':
+			const activeId = action.payload.value - 1;
+			return {
+				...state,
+				curSelectedPage: action.payload,
+				activeIdxPagin: activeId,
+				showingUsersList: defineShowingUsers(state.visibleUsersList, activeId, 2),
+				startPagin: action.start
 			}
 
 		default: 

@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 
+import SelectionPages from '../selection-pages';
 import styles from './pagination-users.m.less';
 import arrowPrev from './arrow-prev.svg';
 import arrowNext from './arrow-next.svg';
 
 class PaginationUsers extends Component {
 	state = {
-		totalPaginBtns: null,
+		totalPaginBtns: null, // total quantity of buttons
 		range: 3, //quantity of visible main buttons
 		//start: 1, // index of a first main button
 		arrCountVisBtns: [],
@@ -105,7 +106,7 @@ class PaginationUsers extends Component {
 	}
 
 	render() {
-		const {visibleUsersList, activeIdx, start, onBtnPagin, onLastBtn} = this.props;
+		const {visibleUsersList, activeIdx, start, onLastBtn, selectChanged, curPage} = this.props;
 		const {btnsMain, disabledPrev, disabledNext, totalPaginBtns, range} = this.state;
 		const classLastBtn = activeIdx === (totalPaginBtns-1) ? 'activeBtnMain' : 'btnMain';
 		const payloadLastBtn = {active:totalPaginBtns - 1, start: totalPaginBtns-range};
@@ -150,7 +151,7 @@ class PaginationUsers extends Component {
 				) : null;
 
 		return (
-			<div>
+			<div className={styles.wrapperPagination}>
 				<div className={styles.boxPagination}>
 					{contentBtnArrowPrev}
 					<ul className={styles.pagination}>
@@ -160,6 +161,8 @@ class PaginationUsers extends Component {
 					</ul>
 					{contentBtnArrowNext}
 				</div>
+				<SelectionPages total = {totalPaginBtns} range={range} start={start}
+						selectChanged={selectChanged} curPage={curPage} />
 			</div>
 		);
 	}

@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {compose, withAdminAccountService} from '../hoc';
 import {filterOffices, openModalNewUser, inputChanged,
 			onSearchUsers, onBtnArrow, onBtnPagin,
-			onLastBtnPagin} from '../../actions'; 
+			onLastBtnPagin, selectChanged} from '../../actions'; 
 import {openModal} from '../../utils';
 
 import ListBtnsOffices from '../list-btns-offices';
@@ -28,7 +28,8 @@ class UsersContainer extends Component {
 		const {listOffices, filterOffices, isActiveOffice,
 				inputChanged, onSearch, searchUsers,
 				visibleUsersList, start, onBtnArrow, 
-				activeIdx, onBtnPagin, onLastBtn} = this.props;
+				activeIdx, onBtnPagin, onLastBtn, 
+				selectChanged, curPage} = this.props;
 		
 		return (
 			<div>
@@ -47,7 +48,7 @@ class UsersContainer extends Component {
 				<ModalConfirm />
 				<PaginationUsers visibleUsersList={visibleUsersList} start={start}
 							onBtnArrow={onBtnArrow} activeIdx={activeIdx} onBtnPagin={onBtnPagin}
-							onLastBtn={onLastBtn} />
+							onLastBtn={onLastBtn} selectChanged={selectChanged} curPage={curPage} />
 			</div>
 		);
 	}
@@ -58,11 +59,12 @@ const mapMethodsToProps = (adminAccountService) => ({
 });
 
 const mapStateToProps = ({listOffices, isActiveOffice, searchUsers, 
-	visibleUsersList, startPagin, activeIdxPagin}) => ({
+	visibleUsersList, startPagin, activeIdxPagin, curSelectedPage}) => ({
 	listOffices, isActiveOffice,
 	searchUsers, visibleUsersList,
 	start: startPagin,
-	activeIdx: activeIdxPagin
+	activeIdx: activeIdxPagin,
+	curPage: curSelectedPage
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -72,7 +74,8 @@ const mapDispatchToProps = (dispatch) => ({
 	onSearch: () => dispatch(onSearchUsers()),
 	onBtnArrow: (data) => dispatch(onBtnArrow(data)),
 	onBtnPagin: (idx) => dispatch(onBtnPagin(idx)),
-	onLastBtn: (payload) => dispatch(onLastBtnPagin(payload))
+	onLastBtn: (payload) => dispatch(onLastBtnPagin(payload)),
+	selectChanged: (payload, name, start) => dispatch(selectChanged(payload, name, start))
 });
 
 export default compose(
