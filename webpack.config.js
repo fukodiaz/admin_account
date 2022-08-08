@@ -23,9 +23,6 @@ const conf = {
 				target: "http://localhost:3001",
 				secure: false, 
 				changeOrigin: true,
-			// 	pathRewrite: {
-			// 	"^/4cities": ""
-			// },
 			}
 		},
 

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {compose, withAdminAccountService} from '../hoc';
 import {filterOffices, openModalNewUser, inputChanged,
 			onSearchUsers, onBtnArrow, onBtnPagin,
 			onLastBtnPagin, selectChanged} from '../../actions'; 
@@ -29,7 +28,7 @@ class UsersContainer extends Component {
 				inputChanged, onSearch, searchUsers,
 				visibleUsersList, start, onBtnArrow, 
 				activeIdx, onBtnPagin, onLastBtn, 
-				selectChanged, curPage} = this.props;
+				selectChanged, curPage, totalPaginBtns} = this.props;
 		
 		return (
 			<div>
@@ -48,23 +47,22 @@ class UsersContainer extends Component {
 				<ModalConfirm />
 				<PaginationUsers visibleUsersList={visibleUsersList} start={start}
 							onBtnArrow={onBtnArrow} activeIdx={activeIdx} onBtnPagin={onBtnPagin}
-							onLastBtn={onLastBtn} selectChanged={selectChanged} curPage={curPage} />
+							onLastBtn={onLastBtn} selectChanged={selectChanged} curPage={curPage}
+							totalPaginBtns={totalPaginBtns} />
 			</div>
 		);
 	}
 }
 
-const mapMethodsToProps = (adminAccountService) => ({
-	//getDataDirectories: adminAccountService.getDataDirectories,
-});
-
 const mapStateToProps = ({listOffices, isActiveOffice, searchUsers, 
-	visibleUsersList, startPagin, activeIdxPagin, curSelectedPage}) => ({
+	visibleUsersList, startPagin, activeIdxPagin, curSelectedPage, 
+	totalPaginBtns}) => ({
 	listOffices, isActiveOffice,
 	searchUsers, visibleUsersList,
 	start: startPagin,
 	activeIdx: activeIdxPagin,
-	curPage: curSelectedPage
+	curPage: curSelectedPage,
+	totalPaginBtns
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -78,7 +76,4 @@ const mapDispatchToProps = (dispatch) => ({
 	selectChanged: (payload, name, start) => dispatch(selectChanged(payload, name, start))
 });
 
-export default compose(
-	withAdminAccountService(mapMethodsToProps),
-	connect(mapStateToProps, mapDispatchToProps)
-)(UsersContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer);

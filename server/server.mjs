@@ -24,8 +24,8 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(express.static('/usr/src/app/dist'));
-app.use(rewrite('/api/*', '/$1'));
+app.use(express.static('dist')); //'/usr/src/app/dist' - docker_version
+//app.use(rewrite('/api/*', '/$1'));
 
 app.use('/personalData', personalDataRouter);
 app.use('/personalPhoto', personalPhotoRouter);
@@ -37,8 +37,8 @@ app.use('/users', usersRouter);
 app.listen(PORT);
 
 app.get('/', (req, res) => {
-	// res.sendFile(createPath('index'));
-	res.sendFile('/usr/src/app/dist/index.html');
+	res.sendFile(createPath('index'));
+	//res.sendFile('/usr/src/app/dist/index.html'); //docker_version
 });
 
 app.use((req, res) => {

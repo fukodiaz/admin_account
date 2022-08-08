@@ -36,7 +36,7 @@ class SelectionPages extends Component {
 		if ((start-2 + range) < activePage) {
 			newStart = activePage - range + 2;
 		}
-		if (activePage + 1 === total) {
+		if ((activePage + 1 === total) && (range <= total)) {
 			newStart = total - range;
 		}
 
@@ -54,7 +54,7 @@ class SelectionPages extends Component {
 				</p>
 				<SelectItems  name='selectPages' value={value} 
 						dataOptions={dataOptions} onChangeSelect={this.selectPage} 
-						height={150} />
+						height={124} />
 			</div>
 		);
 	}

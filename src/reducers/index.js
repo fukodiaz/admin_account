@@ -109,7 +109,8 @@ const initialState = {
 
 	startPagin: 1,
 	activeIdxPagin: 0,
-	curSelectedPage: 1
+	curSelectedPage: 1,
+	totalPaginBtns: null, // total quantity of buttons 
 
 };
 
@@ -649,6 +650,7 @@ const reducer = (state = initialState, action) => {
 			let visibleUsersList = state.usersList.filter(
 											(user,idx,arr) => filterUsersByOffice(user, idx, arr, state, payload));
 			visibleUsersList = visibleUsersList.map(addIndexObj);
+			const totalPaginBtns = visibleUsersList.length ? Math.ceil(visibleUsersList.length/2) : 0;
 			return {
 				...state,
 				isActiveOffice: payload,
@@ -657,7 +659,8 @@ const reducer = (state = initialState, action) => {
 				startPagin: 1,
 				activeIdxPagin: 0,
 				showingUsersList: defineShowingUsers(visibleUsersList, 0, 2),
-				curSelectedPage: 1
+				curSelectedPage: 1,
+				totalPaginBtns
 			}
 
 		case 'FETCH_USERS_DATA_REQUEST': 
@@ -679,7 +682,8 @@ const reducer = (state = initialState, action) => {
 				usersListLoading: false,
 				usersListError: false,
 				visibleUsersList: visUsersList,
-				showingUsersList: defineShowingUsers(visUsersList, state.activeIdxPagin, 2)
+				showingUsersList: defineShowingUsers(visUsersList, state.activeIdxPagin, 2),
+				totalPaginBtns: Math.ceil(visUsersList.length/2)
 			}
 
 		case 'FETCH_USERS_DATA_FAILURE':
@@ -721,7 +725,8 @@ const reducer = (state = initialState, action) => {
 				visibleUsersList: visualUsersList,
 				userDataLoading: false,
 				userDataError: false,
-				showingUsersList: defineShowingUsers(visualUsersList, state.activeIdxPagin, 2)
+				showingUsersList: defineShowingUsers(visualUsersList, state.activeIdxPagin, 2),
+				totalPaginBtns: Math.ceil(visualUsersList.length/2)
 			}
 		
 		case 'USER_DATA_FAILURE':
@@ -767,7 +772,8 @@ const reducer = (state = initialState, action) => {
 				usersList: action.payload,
 				visibleUsersList: viUsersList,
 				userPutError: false,
-				showingUsersList: defineShowingUsers(viUsersList, state.activeIdxPagin, 2)
+				showingUsersList: defineShowingUsers(viUsersList, state.activeIdxPagin, 2),
+				totalPaginBtns: Math.ceil(viUsersList.length/2)
 			}	
 
 		case 'PUT_USER_DATA_FAILURE':
@@ -801,7 +807,8 @@ const reducer = (state = initialState, action) => {
 				usersList: action.payload,
 				visibleUsersList: vUsersList,
 				userDeleteError: false,
-				showingUsersList: defineShowingUsers(vUsersList, state.activeIdxPagin, 2)
+				showingUsersList: defineShowingUsers(vUsersList, state.activeIdxPagin, 2),
+				totalPaginBtns: Math.ceil(vUsersList.length/2)
 			}
 
 		case 'DELETE_USER_FAILURE':
@@ -819,7 +826,11 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				visibleUsersList: searchUsersList,
-				showingUsersList: defineShowingUsers(searchUsersList, state.activeIdxPagin, 2)
+				showingUsersList: defineShowingUsers(searchUsersList, 0, 2),
+				totalPaginBtns: Math.ceil(searchUsersList.length/2),
+				activeIdxPagin: 0,
+				startPagin: 1,
+				curSelectedPage: 1
 			}
 
 		case 'ON_BTN_ARROW':

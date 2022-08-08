@@ -7,13 +7,10 @@ import arrowNext from './arrow-next.svg';
 
 class PaginationUsers extends Component {
 	state = {
-		totalPaginBtns: null, // total quantity of buttons
 		range: 3, //quantity of visible main buttons
-		//start: 1, // index of a first main button
 		arrCountVisBtns: [],
 		btnsMain: null,
 		flagBtnEllipsis: false,
-		//activeIdx: 0,
 		disabledPrev: false,
 		disabledNext: false
 	} 
@@ -35,17 +32,14 @@ class PaginationUsers extends Component {
 	}
 
 	componentDidMount() {
-		this.defineAbledBtnArrow(this.props.activeIdx, this.state.totalPaginBtns);
+		this.defineAbledBtnArrow(this.props.activeIdx, this.props.totalPaginBtns);
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		const {visibleUsersList, activeIdx, start, onBtnPagin} = this.props;
-		const {totalPaginBtns, range, arrCountVisBtns} = this.state;
-		if (prevProps.visibleUsersList.length !== visibleUsersList.length) {
-			this.setState({totalPaginBtns: visibleUsersList.length ? Math.ceil(visibleUsersList.length/2) : 0});
-		}
+		const {visibleUsersList, activeIdx, start, onBtnPagin, totalPaginBtns} = this.props;
+		const {range, arrCountVisBtns} = this.state;
 
-		if (prevState.totalPaginBtns !== totalPaginBtns || prevProps.start !== start) {
+		if (prevProps.totalPaginBtns !== totalPaginBtns || prevProps.start !== start) {
 			if (totalPaginBtns) {
 				for (let i = start, arr = []; i <= totalPaginBtns && arr.length < range; i++) {
 					arr = [...arr, i];
@@ -73,14 +67,14 @@ class PaginationUsers extends Component {
 			this.setState({btnsMain: btns});
 		}
 
-		if (prevProps.activeIdx !== activeIdx || prevState.totalPaginBtns !== totalPaginBtns) {
-			this.defineAbledBtnArrow(this.props.activeIdx, this.state.totalPaginBtns);
+		if (prevProps.activeIdx !== activeIdx || prevProps.totalPaginBtns !== totalPaginBtns) {
+			this.defineAbledBtnArrow(this.props.activeIdx, this.props.totalPaginBtns);
 		}
 	}
 
 	onClickArrow = (direct) => {
-		const {totalPaginBtns, range} = this.state;
-		const { activeIdx, onBtnArrow, start} = this.props;
+		const {range} = this.state;
+		const { activeIdx, onBtnArrow, start, totalPaginBtns} = this.props;
 		if (direct === 'prev') {
 			if (activeIdx - 1 >= 0) {
 				onBtnArrow({activeIdxShift: -1});
@@ -106,8 +100,8 @@ class PaginationUsers extends Component {
 	}
 
 	render() {
-		const {visibleUsersList, activeIdx, start, onLastBtn, selectChanged, curPage} = this.props;
-		const {btnsMain, disabledPrev, disabledNext, totalPaginBtns, range} = this.state;
+		const {totalPaginBtns, activeIdx, start, onLastBtn, selectChanged, curPage} = this.props;
+		const {btnsMain, disabledPrev, disabledNext, range} = this.state;
 		const classLastBtn = activeIdx === (totalPaginBtns-1) ? 'activeBtnMain' : 'btnMain';
 		const payloadLastBtn = {active:totalPaginBtns - 1, start: totalPaginBtns-range};
 		const	contentBtnArrowPrev = totalPaginBtns ? (
@@ -150,6 +144,11 @@ class PaginationUsers extends Component {
 					</li>	
 				) : null;
 
+		const contentSelectionPages = totalPaginBtns ? (
+					<SelectionPages total = {totalPaginBtns} range={range} start={start}
+						selectChanged={selectChanged} curPage={curPage} />
+				) : null;
+
 		return (
 			<div className={styles.wrapperPagination}>
 				<div className={styles.boxPagination}>
@@ -161,8 +160,7 @@ class PaginationUsers extends Component {
 					</ul>
 					{contentBtnArrowNext}
 				</div>
-				<SelectionPages total = {totalPaginBtns} range={range} start={start}
-						selectChanged={selectChanged} curPage={curPage} />
+				{contentSelectionPages}
 			</div>
 		);
 	}
