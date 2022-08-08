@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const conf = {
 	entry: './src/index.js',
 	output: {
-		path: path.resolve(__dirname),
+		path: path.resolve(__dirname, 'dist'),
 		filename: 'main.js',
 		//publicPath: ''
 	},
@@ -14,13 +14,13 @@ const conf = {
 
 	devServer: {
 		static: {
-			directory: path.join(__dirname)
+			directory: path.join(__dirname, 'dist')
 		},
 		historyApiFallback: true,
-		port: 8080,
+		port: 8081,
 		proxy: {
 			"*": {
-				target: "http://localhost:3000",
+				target: "http://localhost:3001",
 				secure: false, 
 				changeOrigin: true,
 			// 	pathRewrite: {
