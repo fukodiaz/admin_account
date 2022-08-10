@@ -125,7 +125,7 @@ export default class AdminAccountService {
 			},
 			body: data
 		});
-	
+		
 		return res.json();
 	}
 
@@ -137,7 +137,7 @@ export default class AdminAccountService {
 				'Access-Control-Allow-Origin': '*',
 			}
 		});
-	
+
 		return res.json();
 	}
 
@@ -150,7 +150,7 @@ export default class AdminAccountService {
 				'Content-type': 'application/json',
 			}
 		});
-	
+
 		return res.json();
 	}
 

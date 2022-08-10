@@ -17,7 +17,7 @@ const urlConfigCloud = {
 	username: REDIS_USER
 };
 
-const redis = createClient(urlConfigCloud, { return_buffers : true });
+const redis = createClient(urlConfigDocker, { return_buffers : true });
 await redis.connect();
 const client = await new Client().use(redis); 
 

@@ -1004,6 +1004,7 @@
 
 .wrapperPagination__ec9308c {
   display: flex;
+  padding-bottom: 100px;
 }
 .boxPagination__dddd8c7 {
   display: flex;
@@ -1179,21 +1180,6 @@
 .headerManagementUsers__d6b78b9:active,
 .headerManagementUsers__d6b78b9:focus {
   color: rgba(23, 68, 114, 0.7);
-}
-
-.headerStructure__c0084ee {
-  font-size: 22px;
-  color: #174472;
-}
-.headerStructure__c0084ee:hover {
-  color: rgba(23, 68, 114, 0.9);
-}
-.headerStructure__c0084ee:active,
-.headerStructure__c0084ee:focus {
-  color: rgba(23, 68, 114, 0.7);
-}
-.buttonStructure__a4a70af {
-  background-color: transparent;
 }
 
 .blockTheme__ba2ff42 {
@@ -1379,15 +1365,16 @@ body {
   font-family: 'Inter', 'Helvetica', sans-serif;
   color: #000000;
   font-style: normal;
-  background-color: #f2f2f2;
+  background-color: #fcfcee;
+  border-bottom: 43px solid #225f9d;
 }
 body::before {
   content: '';
   position: absolute;
-  top: 0;
   left: 0;
-  width: 100%;
+  top: 0;
   height: 22px;
+  width: 100%;
   background-color: #225f9d;
 }
 img {
@@ -1422,7 +1409,6 @@ button {
   max-width: 1200px;
   margin: 0 auto;
   padding-top: 45px;
-  background-color: #fcfcee;
 }
 .headerAccount__c6730c3 {
   margin-bottom: 31px;

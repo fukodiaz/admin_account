@@ -13,7 +13,7 @@ import {router as directoriesRouter} from './routers/directories-router.mjs';
 import {router as usersRouter} from './routers/users-router.mjs';
 
 const app = express();
-const PORT = 3001;//process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 const corsOptions = {
 	origin: 'http://localhost:8081', //'https://admin-account.herokuapp.com/'
 	//credentials: true,
@@ -24,7 +24,7 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(express.static('dist')); //'/usr/src/app/dist' - docker_version
+app.use(express.static('/usr/src/app/dist')); //'/usr/src/app/dist' - docker_version
 //app.use(rewrite('/api/*', '/$1'));
 
 app.use('/personalData', personalDataRouter);
@@ -37,8 +37,8 @@ app.use('/users', usersRouter);
 app.listen(PORT);
 
 app.get('/', (req, res) => {
-	res.sendFile(createPath('index'));
-	//res.sendFile('/usr/src/app/dist/index.html'); //docker_version
+	//res.sendFile(createPath('index'));
+	res.sendFile('/usr/src/app/dist/index.html'); //docker_version
 });
 
 app.use((req, res) => {
