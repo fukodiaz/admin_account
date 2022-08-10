@@ -122,9 +122,9 @@ const mapMethodsToProps = (adminAccountService) => ({
 	putUserData: adminAccountService.putUserData
 });
 
-const mapStateToProps = ({headingModalUser, currentDepartments, 
+const mapStateToProps = ({users: {headingModalUser, currentDepartments, 
 	listPositions, position, department, fioUser, emailUser,
-	phoneUser, passwordUser, methodUser, userId}) => ({
+	phoneUser, passwordUser, methodUser, userId}}) => ({
 	heading: headingModalUser,
 	currentDepartments,
 	positions: listPositions,

@@ -70,7 +70,8 @@ const mapMethodsToProps = (adminAccountService) => ({
 	postPhotoPersonal: adminAccountService.postPhotoPersonal
 });
 
-const mapStateToProps = ({flagEditingPersonal, dataPersonal, photoPersonal, fio, email}) => ({
+const mapStateToProps = ({personalData: {flagEditingPersonal, dataPersonal,
+			photoPersonal, fio, email}}) => ({
 	flagEditingPersonal, dataPersonal,
 	photoPersonal, email, fio
 });

@@ -48,7 +48,7 @@ router.post('/', busboy({immediate: true}), async (req, res, next) => { //multer
 
 		personalData.fio = fio;
 		personalData.email = email;
-		personalData.photo = photoData.toString('base64');
+		personalData.photo = photoData ? photoData.toString('base64') : null;
 		personalData.imagePhotoType = imagePhotoType;
 
 		let id = await personalDataRepository.save(personalData);

@@ -31,40 +31,53 @@ class PaginationUsers extends Component {
 		}
 	}
 
+	createArrCountVisBtns = (totalPaginBtns, start, range) => {
+		if (totalPaginBtns) {
+			for (let i = start, arr = []; i <= totalPaginBtns && arr.length < range; i++) {
+				arr = [...arr, i];
+				this.setState({arrCountVisBtns:  arr});
+			}
+		}
+		if (!totalPaginBtns) {
+			this.setState({arrCountVisBtns: []});
+		}
+	}
+
+	createBtnsMain = (arrCountVisBtns, activeIdx, onBtnPagin) => {
+		const btns = arrCountVisBtns.map(item => {
+			const classBtnMain = activeIdx === item - 1 ? 'activeBtnMain' : 'btnMain';
+			
+			return(
+				<li key={item} className={styles.itemBtnMain}>
+					<button type="button" className={styles[classBtnMain]}
+								onClick={() => onBtnPagin(item - 1)}>
+						{item}
+					</button>
+				</li>	
+			);
+		});
+		this.setState({btnsMain: btns});
+	}
+
 	componentDidMount() {
+		const {activeIdx, start, onBtnPagin, totalPaginBtns} = this.props;
+		const {range, arrCountVisBtns} = this.state;
+
 		this.defineAbledBtnArrow(this.props.activeIdx, this.props.totalPaginBtns);
+		this.createArrCountVisBtns(totalPaginBtns, start, range);
+		this.createBtnsMain(arrCountVisBtns, activeIdx, onBtnPagin);
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		const {visibleUsersList, activeIdx, start, onBtnPagin, totalPaginBtns} = this.props;
+		const {activeIdx, start, onBtnPagin, totalPaginBtns} = this.props;
 		const {range, arrCountVisBtns} = this.state;
 
 		if (prevProps.totalPaginBtns !== totalPaginBtns || prevProps.start !== start) {
-			if (totalPaginBtns) {
-				for (let i = start, arr = []; i <= totalPaginBtns && arr.length < range; i++) {
-					arr = [...arr, i];
-					this.setState({arrCountVisBtns:  arr});
-				}
-			}
-			if (!totalPaginBtns) {
-				this.setState({arrCountVisBtns: []});
-			}
+			this.createArrCountVisBtns(totalPaginBtns, start, range);
 		}
 
 		if (prevState.arrCountVisBtns !== arrCountVisBtns || prevProps.activeIdx !== activeIdx) {
-			const btns = arrCountVisBtns.map(item => {
-				const classBtnMain = activeIdx === item - 1 ? 'activeBtnMain' : 'btnMain';
-				
-				return(
-					<li key={item} className={styles.itemBtnMain}>
-						<button type="button" className={styles[classBtnMain]}
-									onClick={() => onBtnPagin(item - 1)}>
-							{item}
-						</button>
-					</li>	
-				);
-			});
-			this.setState({btnsMain: btns});
+			this.createBtnsMain(arrCountVisBtns, activeIdx, onBtnPagin);
 		}
 
 		if (prevProps.activeIdx !== activeIdx || prevProps.totalPaginBtns !== totalPaginBtns) {

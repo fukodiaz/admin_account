@@ -122,8 +122,8 @@ const mapMethodsToProps = (adminAccountService) => ({
 	putNewsData: adminAccountService.putNewsData
 });
 
-const mapStateToProps = ({headingModal, newsImage, newsData, 
-	theme, text, urlImage, nameFileImage, methodNews, entityId, flagImageFile}) => ({
+const mapStateToProps = ({news: {headingModal, newsImage, newsData, 
+	theme, text, urlImage, nameFileImage, methodNews, entityId, flagImageFile}}) => ({
 	headingModal, newsImage, newsData,theme, text, urlImage,
 	nameFileImage, methodNews, entityId, flagImageFile
 });

@@ -54,9 +54,9 @@ class UsersContainer extends Component {
 	}
 }
 
-const mapStateToProps = ({listOffices, isActiveOffice, searchUsers, 
+const mapStateToProps = ({users: {listOffices, isActiveOffice, searchUsers, 
 	visibleUsersList, startPagin, activeIdxPagin, curSelectedPage, 
-	totalPaginBtns}) => ({
+	totalPaginBtns, flagShowUsers}}) => ({
 	listOffices, isActiveOffice,
 	searchUsers, visibleUsersList,
 	start: startPagin,

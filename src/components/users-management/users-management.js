@@ -21,7 +21,7 @@ const UsersManagement = ({flagShowUsers, openBlock}) => {
 	);
 };
 
-const mapStateToProps = ({flagShowUsers}) => ({
+const mapStateToProps = ({users: {flagShowUsers}}) => ({
 	flagShowUsers
 });
 

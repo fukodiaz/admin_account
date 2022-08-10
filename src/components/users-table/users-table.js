@@ -87,8 +87,8 @@ const mapMethodsToProps = (adminAccountService) => ({
 	getUsers: adminAccountService.getUsers,
 });
 
-const mapStateToProps = ({usersList, usersListError, 
-	visibleUsersList, showingUsersList}) => ({
+const mapStateToProps = ({users: {usersList, usersListError, 
+	visibleUsersList, showingUsersList}}) => ({
 	usersList, usersListError,
 	visUsersList: visibleUsersList,
 	showingUsers: showingUsersList

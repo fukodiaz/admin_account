@@ -120,8 +120,8 @@ const mapMethodsToProps = (adminAccountService) => ({
 	putTitleDirectory: adminAccountService.putTitleDirectory
 });
 
-const mapStateToProps = ({labelSearchDirect,listTitleDirect,typeDirect,
-									visibleListTitle, searchTitle, additTitle, entityIdDirect}) => ({
+const mapStateToProps = ({users: {labelSearchDirect, listTitleDirect, typeDirect,
+									visibleListTitle, searchTitle, additTitle, entityIdDirect}}) => ({
 	labelSearch: labelSearchDirect,
 	list: listTitleDirect,
 	type: typeDirect,

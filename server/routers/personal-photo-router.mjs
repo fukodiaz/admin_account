@@ -29,7 +29,7 @@ router.post('/', busboy({immediate: true}), async(req, res, next) => {
 	req.busboy.on('finish', async () => {
 		//if (!photoData) next(new Error('file binary data cannot be null'));
 
-		personalPhoto.photo = photoData.toString('base64');
+		personalPhoto.photo = photoData ? photoData.toString('base64') : null;
 		personalPhoto.imagePhotoType = imagePhotoType;
 
 		let id = await personalPhotoRepository.save(personalPhoto);

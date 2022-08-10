@@ -22,7 +22,7 @@ const NewsEditing = ({flagOpenNews, openBlock}) => {
 	);
 };
 
-const mapStateToProps = ({flagOpenNews}) => ({
+const mapStateToProps = ({news: {flagOpenNews}}) => ({
 	flagOpenNews
 });
 

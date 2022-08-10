@@ -74,7 +74,7 @@ const mapMethodsToProps = (adminAccountService) => ({
 	getNewsList: adminAccountService.getNewsList,
 });
 
-const mapStateToProps = ({visibleNewsList, newsListLoading, newsListError}) => ({
+const mapStateToProps = ({news: {visibleNewsList, newsListLoading, newsListError}}) => ({
 	visibleNewsList, newsListLoading, newsListError
 });
 

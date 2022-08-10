@@ -21,7 +21,7 @@ const ManagementDirectories = ({flagOpenDirectories, openBlock}) => {
 	);
 };
 
-const mapStateToProps = ({flagOpenDirectories}) => ({
+const mapStateToProps = ({users: {flagOpenDirectories}}) => ({
 	flagOpenDirectories
 });
 

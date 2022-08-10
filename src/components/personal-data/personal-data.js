@@ -27,7 +27,7 @@ class PersonalData extends Component {
 	}
 }
 
-const mapStateToProps = ({flagOpenPersonal}) => ({
+const mapStateToProps = ({personalData: {flagOpenPersonal}}) => ({
 	flagOpenPersonal
 });
 

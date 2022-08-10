@@ -91,7 +91,8 @@ const mapMethodsToProps = (adminAccountService) => ({
 	deleteUser: adminAccountService.deleteUser
 });
 
-const mapStateToProps = ({IdNewsDeleted, pieceDeletedHeader,IdUserDeleted}) => ({
+const mapStateToProps = ({news: {IdNewsDeleted, pieceDeletedHeader},
+			users: {IdUserDeleted} = {}}) => ({
 	IdNewsDeleted,
 	IdUserDeleted,
 	pieceHeader: pieceDeletedHeader

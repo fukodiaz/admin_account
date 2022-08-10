@@ -56,8 +56,8 @@ const mapMethodsToProps = (adminAccountService) => ({
 	getDataDirectories: adminAccountService.getDataDirectories,
 });
 
-const mapStateToProps = ({directoriesList, directoriesLoading, 
-								directoriesError,visibleDirectories}) => ({
+const mapStateToProps = ({users: {directoriesList, directoriesLoading, 
+								directoriesError,visibleDirectories}}) => ({
 	directoriesList, directoriesLoading, 
 	directoriesError, visibleDirectories
 });
