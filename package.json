@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack serve --mode development",
     "build": "webpack --mode production",
-    "start": "nodemon -L --experimental-modules --es-module-specifier-resolution=node server/server.mjs",
+    "start": "nodemon --experimental-modules --es-module-specifier-resolution=node server/server.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ilya St.",
